@@ -6,45 +6,48 @@ namespace ERAM_2_GEOJSON.Parsers
 {
     public class XmlParser
     {
-        public List<GeoMapRecord> Parse(string filePath)
+        public List<GeoMapRecord> Parse(string xmlFilePath)
         {
-            List<GeoMapRecord> records = new List<GeoMapRecord>();
-            XDocument xmlDoc = XDocument.Load(filePath);
+            XDocument xmlDoc = XDocument.Load(xmlFilePath);
+            List<GeoMapRecord> geoMapRecords = new List<GeoMapRecord>();
 
-            foreach (var geoMapRecord in xmlDoc.Descendants("GeoMapRecord"))
+            foreach (XElement geoMapRecordElement in xmlDoc.Descendants("GeoMapRecord"))
             {
                 GeoMapRecord record = new GeoMapRecord
                 {
-                    GeomapId = geoMapRecord.Element("GeomapId")?.Value ?? "Unknown",
-                    LabelLine1 = geoMapRecord.Element("LabelLine1")?.Value ?? "N/A",
-                    LabelLine2 = geoMapRecord.Element("LabelLine2")?.Value ?? "N/A"
+                    GeomapId = geoMapRecordElement.Element("GeomapId")?.Value ?? "Unknown",
+                    LabelLine1 = geoMapRecordElement.Element("LabelLine1")?.Value ?? "N/A",
+                    LabelLine2 = geoMapRecordElement.Element("LabelLine2")?.Value ?? "N/A",
+                    ObjectTypes = new List<GeoMapObjectType>() // Initialize with an empty list to fulfill the 'required' property requirement
                 };
 
-                foreach (var objectType in geoMapRecord.Elements("GeoMapObjectType"))
+                foreach (XElement objectTypeElement in geoMapRecordElement.Elements("GeoMapObjectType"))
                 {
                     GeoMapObjectType mapObjectType = new GeoMapObjectType
                     {
-                        MapObjectType = objectType.Element("MapObjectType")?.Value ?? "Unknown",
-                        MapGroupId = objectType.Element("MapGroupId")?.Value ?? "Unknown"
+                        MapObjectType = objectTypeElement.Element("MapObjectType")?.Value ?? "Unknown",
+                        MapGroupId = objectTypeElement.Element("MapGroupId")?.Value ?? "0",
+                        Lines = new List<GeoMapLine>(),     // Initialize as empty list for required property
+                        Symbols = new List<GeoMapSymbol>()  // Initialize as empty list for required property
                     };
 
-                    // Parse GeoMapLine elements within GeoMapObjectType
-                    foreach (var line in objectType.Elements("GeoMapLine"))
+                    foreach (XElement lineElement in objectTypeElement.Elements("GeoMapLine"))
                     {
                         GeoMapLine mapLine = new GeoMapLine
                         {
-                            LineObjectId = line.Element("LineObjectId")?.Value ?? "Unknown",
-                            StartLatitude = line.Element("StartLatitude")?.Value ?? "N/A",
-                            StartLongitude = line.Element("StartLongitude")?.Value ?? "N/A",
-                            EndLatitude = line.Element("EndLatitude")?.Value ?? "N/A",
-                            EndLongitude = line.Element("EndLongitude")?.Value ?? "N/A"
+                            LineObjectId = lineElement.Element("LineObjectId")?.Value ?? "Unknown",
+                            StartLatitude = lineElement.Element("StartLatitude")?.Value ?? "N/A",
+                            StartLongitude = lineElement.Element("StartLongitude")?.Value ?? "N/A",
+                            EndLatitude = lineElement.Element("EndLatitude")?.Value ?? "N/A",
+                            EndLongitude = lineElement.Element("EndLongitude")?.Value ?? "N/A",
+                            FilterGroups = new List<string>()  // Initialize as empty list for required property
                         };
 
                         // Determine the appropriate FilterGroup for the line
-                        var lineFilters = line.Elements("GeoLineFilters").Elements("FilterGroup");
+                        var lineFilters = lineElement.Elements("GeoLineFilters").Elements("FilterGroup");
                         if (!lineFilters.Any())
                         {
-                            lineFilters = objectType.Element("DefaultLineProperties")?.Elements("GeoLineFilters")?.Elements("FilterGroup");
+                            lineFilters = objectTypeElement.Element("DefaultLineProperties")?.Elements("GeoLineFilters")?.Elements("FilterGroup");
                         }
 
                         if (lineFilters != null)
@@ -58,21 +61,26 @@ namespace ERAM_2_GEOJSON.Parsers
                         mapObjectType.Lines.Add(mapLine);
                     }
 
-                    // Parse GeoMapSymbol elements within GeoMapObjectType
-                    foreach (var symbol in objectType.Elements("GeoMapSymbol"))
+                    foreach (XElement symbolElement in objectTypeElement.Elements("GeoMapSymbol"))
                     {
                         GeoMapSymbol geoMapSymbol = new GeoMapSymbol
                         {
-                            SymbolId = symbol.Element("SymbolId")?.Value ?? "Unknown",
-                            Latitude = symbol.Element("Latitude")?.Value ?? "N/A",
-                            Longitude = symbol.Element("Longitude")?.Value ?? "N/A"
+                            SymbolId = symbolElement.Element("SymbolId")?.Value ?? "Unknown",
+                            Latitude = symbolElement.Element("Latitude")?.Value ?? "N/A",
+                            Longitude = symbolElement.Element("Longitude")?.Value ?? "N/A",
+                            FilterGroups = new List<string>(),   // Initialize as empty list for required property
+                            GeoMapText = symbolElement.Element("GeoMapText") != null ? new GeoMapText
+                            {
+                                TextLine = symbolElement.Element("GeoMapText")?.Element("TextLine")?.Value ?? "N/A",
+                                FilterGroups = new List<string>() // Initialize as empty list for required property
+                            } : null
                         };
 
                         // Determine the appropriate FilterGroup for the symbol
-                        var symbolFilters = symbol.Elements("GeoSymbolFilters").Elements("FilterGroup");
+                        var symbolFilters = symbolElement.Elements("GeoSymbolFilters").Elements("FilterGroup");
                         if (!symbolFilters.Any())
                         {
-                            symbolFilters = objectType.Element("DefaultSymbolProperties")?.Elements("GeoSymbolFilters")?.Elements("FilterGroup");
+                            symbolFilters = objectTypeElement.Element("DefaultSymbolProperties")?.Elements("GeoSymbolFilters")?.Elements("FilterGroup");
                         }
 
                         if (symbolFilters != null)
@@ -83,43 +91,16 @@ namespace ERAM_2_GEOJSON.Parsers
                             }
                         }
 
-                        // Parse GeoMapText if present within GeoMapSymbol
-                        var geoMapTextElement = symbol.Element("GeoMapText");
-                        if (geoMapTextElement != null)
-                        {
-                            GeoMapText geoMapText = new GeoMapText
-                            {
-                                TextLine = geoMapTextElement.Element("GeoTextStrings")?.Element("TextLine")?.Value ?? "N/A"
-                            };
-
-                            // Determine the appropriate FilterGroup for the text
-                            var textFilters = geoMapTextElement.Elements("GeoTextFilters").Elements("FilterGroup");
-                            if (!textFilters.Any())
-                            {
-                                textFilters = objectType.Element("TextDefaultProperties")?.Elements("GeoTextFilters")?.Elements("FilterGroup");
-                            }
-
-                            if (textFilters != null)
-                            {
-                                foreach (var filter in textFilters)
-                                {
-                                    geoMapText.FilterGroups.Add(filter.Value);
-                                }
-                            }
-
-                            geoMapSymbol.GeoMapText = geoMapText;
-                        }
-
                         mapObjectType.Symbols.Add(geoMapSymbol);
                     }
 
                     record.ObjectTypes.Add(mapObjectType);
                 }
 
-                records.Add(record);
+                geoMapRecords.Add(record);
             }
 
-            return records;
+            return geoMapRecords;
         }
     }
 }
