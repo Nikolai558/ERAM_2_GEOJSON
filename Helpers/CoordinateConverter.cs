@@ -27,13 +27,29 @@
                 !int.TryParse(secondsPart, out int seconds) ||
                 !int.TryParse(decimalSecondsPart, out int decimalSeconds))
             {
-                throw new FormatException("DMS components are not in the correct format.");
+                throw new ArgumentException("DMS components are not in the correct format.");
             }
 
             // Validate degrees, minutes, and seconds
             if (minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60)
             {
                 throw new ArgumentException("Invalid DMS values. Minutes and seconds must be between 0 and 59.");
+            }
+
+            // Ensure degrees are in a valid range for latitude and longitude
+            if (direction == 'N' || direction == 'S')
+            {
+                if (degrees < 0 || degrees > 90)
+                {
+                    throw new ArgumentException("Invalid DMS values. Latitude degrees must be between 0 and 90.");
+                }
+            }
+            else if (direction == 'E' || direction == 'W')
+            {
+                if (degrees < 0 || degrees > 180)
+                {
+                    throw new ArgumentException("Invalid DMS values. Longitude degrees must be between 0 and 180.");
+                }
             }
 
             // Convert DMS to decimal
