@@ -5,8 +5,6 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ERAM_2_GEOJSON", "ERAM_2_GEOJSON.csproj", "{4C6C0A9C-171A-45C7-9857-74965DF43DF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ERAM_2_GEOJSON.Tests", "..\ERAM_2_GEOJSON.Tests\ERAM_2_GEOJSON.Tests.csproj", "{7472BF0D-59AE-4A81-9761-FC97FFE3DED7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{4C6C0A9C-171A-45C7-9857-74965DF43DF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C6C0A9C-171A-45C7-9857-74965DF43DF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C6C0A9C-171A-45C7-9857-74965DF43DF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7472BF0D-59AE-4A81-9761-FC97FFE3DED7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7472BF0D-59AE-4A81-9761-FC97FFE3DED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7472BF0D-59AE-4A81-9761-FC97FFE3DED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7472BF0D-59AE-4A81-9761-FC97FFE3DED7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

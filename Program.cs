@@ -8,37 +8,51 @@ namespace ERAM_2_GEOJSON
     {
         static void Main(string[] args)
         {
-            if (args.Length < 2)
-            {
-                Console.WriteLine("Usage: ERAM_2_GEOJSON <InputXmlPath> <OutputDirectory> [CustomProperties=true/false]");
-                return;
-            }
-
-            string inputXmlPath = args[0];
-            string outputDirectory = args[1];
-            bool customProperties = args.Length > 2 && bool.TryParse(args[2], out bool result) ? result : false;
+            // Define the path to the XML file.
+            string inputXmlPath = "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Geomaps_lite-example.xml";
 
             try
             {
-                var parser = new XmlParser();
+                // Create an instance of XmlParser.
+                XmlParser parser = new XmlParser();
+
+                // Parse the XML file.
                 var geoMapRecords = parser.Parse(inputXmlPath);
 
-                Console.WriteLine("Parsed GeoMap Records:");
+                // Print the parsed data to verify correctness.
                 foreach (var record in geoMapRecords)
                 {
                     Console.WriteLine($"GeoMap ID: {record.GeomapId}");
-                    foreach (var objType in record.ObjectTypes)
+                    Console.WriteLine($"Label Line 1: {record.LabelLine1}");
+                    Console.WriteLine($"Label Line 2: {record.LabelLine2}");
+
+                    foreach (var objectType in record.ObjectTypes)
                     {
-                        Console.WriteLine($"\tObject Type: {objType.MapObjectType}, Group ID: {objType.MapGroupId}");
-                        foreach (var line in objType.Lines)
+                        Console.WriteLine($"  Object Type: {objectType.MapObjectType}");
+                        Console.WriteLine($"  Map Group ID: {objectType.MapGroupId}");
+
+                        foreach (var line in objectType.Lines)
                         {
-                            Console.WriteLine($"\t\tLine Object ID: {line.LineObjectId}, Start: ({line.StartLatitude}, {line.StartLongitude}), End: ({line.EndLatitude}, {line.EndLongitude})");
+                            Console.WriteLine($"    Line Object ID: {line.LineObjectId}");
+                            Console.WriteLine($"    Start Latitude: {line.StartLatitude}");
+                            Console.WriteLine($"    Start Longitude: {line.StartLongitude}");
+                            Console.WriteLine($"    End Latitude: {line.EndLatitude}");
+                            Console.WriteLine($"    End Longitude: {line.EndLongitude}");
+                        }
+
+                        foreach (var symbol in objectType.Symbols)
+                        {
+                            Console.WriteLine($"    Symbol ID: {symbol.SymbolId}");
+                            Console.WriteLine($"    Latitude: {symbol.Latitude}");
+                            Console.WriteLine($"    Longitude: {symbol.Longitude}");
+
+                            if (symbol.GeoMapText != null)
+                            {
+                                Console.WriteLine($"      Text Line: {symbol.GeoMapText.TextLine}");
+                            }
                         }
                     }
                 }
-
-                // TODO: Generate GeoJSON from parsed records (next step).
-                Console.WriteLine("GeoJSON generation would be initiated here.");
             }
             catch (Exception ex)
             {
