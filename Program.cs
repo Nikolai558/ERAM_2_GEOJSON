@@ -7,7 +7,9 @@ namespace ERAM_2_GEOJSON
     {
         static void Main(string[] args)
         {
-            string inputXmlPath = "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Geomaps_lite-example.xml";
+            string CurrentDirectory = System.IO.Directory.GetCurrentDirectory();
+
+            string inputXmlPath = $"{CurrentDirectory}\\Geomaps_lite-example.xml";
 
             try
             {
