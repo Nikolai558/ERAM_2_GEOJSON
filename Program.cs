@@ -1,6 +1,5 @@
 ﻿using System;
 using ERAM_2_GEOJSON.Parsers;
-using ERAM_2_GEOJSON.Models;
 
 namespace ERAM_2_GEOJSON
 {
@@ -8,18 +7,13 @@ namespace ERAM_2_GEOJSON
     {
         static void Main(string[] args)
         {
-            // Define the path to the XML file.
             string inputXmlPath = "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Geomaps_lite-example.xml";
 
             try
             {
-                // Create an instance of XmlParser.
                 XmlParser parser = new XmlParser();
-
-                // Parse the XML file.
                 var geoMapRecords = parser.Parse(inputXmlPath);
 
-                // Print the parsed data to verify correctness.
                 foreach (var record in geoMapRecords)
                 {
                     Console.WriteLine($"GeoMap ID: {record.GeomapId}");
@@ -31,24 +25,41 @@ namespace ERAM_2_GEOJSON
                         Console.WriteLine($"  Object Type: {objectType.MapObjectType}");
                         Console.WriteLine($"  Map Group ID: {objectType.MapGroupId}");
 
-                        foreach (var line in objectType.Lines)
-                        {
-                            Console.WriteLine($"    Line Object ID: {line.LineObjectId}");
-                            Console.WriteLine($"    Start Latitude: {line.StartLatitude}");
-                            Console.WriteLine($"    Start Longitude: {line.StartLongitude}");
-                            Console.WriteLine($"    End Latitude: {line.EndLatitude}");
-                            Console.WriteLine($"    End Longitude: {line.EndLongitude}");
-                        }
-
                         foreach (var symbol in objectType.Symbols)
                         {
                             Console.WriteLine($"    Symbol ID: {symbol.SymbolId}");
                             Console.WriteLine($"    Latitude: {symbol.Latitude}");
                             Console.WriteLine($"    Longitude: {symbol.Longitude}");
 
-                            if (symbol.GeoMapText != null)
+                            // Retrieve default and overriding filter groups
+                            var defaultFilters = objectType.DefaultSymbolProperties?.GeoSymbolFilters;
+                            var overridingFilters = symbol.FilterGroups;
+
+                            if (overridingFilters != null && overridingFilters.Count > 0)
                             {
-                                Console.WriteLine($"      Text Line: {symbol.GeoMapText.TextLine}");
+                                // Overriding filters exist; display them
+                                Console.WriteLine("    Default Properties Filter Groups: None");
+                                Console.WriteLine("    Overriding Properties Filter Groups:");
+                                foreach (var filterGroup in overridingFilters)
+                                {
+                                    Console.WriteLine($"      {filterGroup}");
+                                }
+                            }
+                            else if (defaultFilters != null && defaultFilters.Count > 0)
+                            {
+                                // No overriding filters; display default filters
+                                Console.WriteLine("    Default Properties Filter Groups:");
+                                foreach (var filterGroup in defaultFilters)
+                                {
+                                    Console.WriteLine($"      {filterGroup}");
+                                }
+                                Console.WriteLine("    Overriding Properties Filter Groups: None");
+                            }
+                            else
+                            {
+                                // Neither default nor overriding filters exist
+                                Console.WriteLine("    Default Properties Filter Groups: None");
+                                Console.WriteLine("    Overriding Properties Filter Groups: None");
                             }
                         }
                     }

@@ -31,6 +31,11 @@ namespace ERAM_2_GEOJSON.Parsers
                         Symbols = new List<GeoMapSymbol>()  // Initialize as empty list for required property
                     };
 
+                    // Handling DefaultLineProperties, DefaultSymbolProperties, DefaultTextProperties
+                    mapObjectType.DefaultLineProperties = ParseDefaultLineProperties(objectTypeElement.Element("DefaultLineProperties"));
+                    mapObjectType.DefaultSymbolProperties = ParseDefaultSymbolProperties(objectTypeElement.Element("DefaultSymbolProperties"));
+                    mapObjectType.DefaultTextProperties = ParseDefaultTextProperties(objectTypeElement.Element("TextDefaultProperties"));
+
                     foreach (XElement lineElement in objectTypeElement.Elements("GeoMapLine"))
                     {
                         GeoMapLine mapLine = new GeoMapLine
@@ -45,9 +50,9 @@ namespace ERAM_2_GEOJSON.Parsers
 
                         // Determine the appropriate FilterGroup for the line
                         var lineFilters = lineElement.Elements("GeoLineFilters").Elements("FilterGroup");
-                        if (!lineFilters.Any())
+                        if (!lineFilters.Any() && mapObjectType.DefaultLineProperties != null)
                         {
-                            lineFilters = objectTypeElement.Element("DefaultLineProperties")?.Elements("GeoLineFilters")?.Elements("FilterGroup");
+                            lineFilters = mapObjectType.DefaultLineProperties.GeoLineFilters.Select(x => new XElement("FilterGroup", x));
                         }
 
                         if (lineFilters != null)
@@ -78,9 +83,9 @@ namespace ERAM_2_GEOJSON.Parsers
 
                         // Determine the appropriate FilterGroup for the symbol
                         var symbolFilters = symbolElement.Elements("GeoSymbolFilters").Elements("FilterGroup");
-                        if (!symbolFilters.Any())
+                        if (!symbolFilters.Any() && mapObjectType.DefaultSymbolProperties != null)
                         {
-                            symbolFilters = objectTypeElement.Element("DefaultSymbolProperties")?.Elements("GeoSymbolFilters")?.Elements("FilterGroup");
+                            symbolFilters = mapObjectType.DefaultSymbolProperties.GeoSymbolFilters.Select(x => new XElement("FilterGroup", x));
                         }
 
                         if (symbolFilters != null)
@@ -101,6 +106,44 @@ namespace ERAM_2_GEOJSON.Parsers
             }
 
             return geoMapRecords;
+        }
+
+        // Helper Methods to Parse Default Properties
+        private DefaultLineProperties? ParseDefaultLineProperties(XElement? element)
+        {
+            if (element == null) return null;
+
+            DefaultLineProperties defaultProperties = new DefaultLineProperties
+            {
+                GeoLineFilters = element.Elements("GeoLineFilters").Elements("FilterGroup").Select(e => e.Value).ToList()
+            };
+
+            return defaultProperties;
+        }
+
+        private DefaultSymbolProperties? ParseDefaultSymbolProperties(XElement? element)
+        {
+            if (element == null) return null;
+
+            DefaultSymbolProperties defaultProperties = new DefaultSymbolProperties
+            {
+                SymbolStyle = element.Element("SymbolStyle")?.Value ?? "default",
+                GeoSymbolFilters = element.Elements("GeoSymbolFilters").Elements("FilterGroup").Select(e => e.Value).ToList()
+            };
+
+            return defaultProperties;
+        }
+
+        private DefaultTextProperties? ParseDefaultTextProperties(XElement? element)
+        {
+            if (element == null) return null;
+
+            DefaultTextProperties defaultProperties = new DefaultTextProperties
+            {
+                GeoTextFilters = element.Elements("GeoTextFilters").Elements("FilterGroup").Select(e => e.Value).ToList()
+            };
+
+            return defaultProperties;
         }
     }
 }
