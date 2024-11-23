@@ -31,29 +31,27 @@ namespace ERAM_2_GEOJSON
                             Console.WriteLine($"    Latitude: {symbol.Latitude}");
                             Console.WriteLine($"    Longitude: {symbol.Longitude}");
 
-                            // Retrieve default and overriding filter groups
-                            var defaultFilters = objectType.DefaultSymbolProperties?.GeoSymbolFilters;
-                            var overridingFilters = symbol.FilterGroups;
-
-                            if (overridingFilters != null && overridingFilters.Count > 0)
+                            if (symbol.OveridingFilterGroups != null)
                             {
                                 // Overriding filters exist; display them
                                 Console.WriteLine("    Default Properties Filter Groups: None");
                                 Console.WriteLine("    Overriding Properties Filter Groups:");
-                                foreach (var filterGroup in overridingFilters)
+                                foreach (var filterGroup in symbol.OveridingFilterGroups)
                                 {
                                     Console.WriteLine($"      {filterGroup}");
                                 }
+
                             }
-                            else if (defaultFilters != null && defaultFilters.Count > 0)
+                            else if (symbol.FilterGroups.Count() > 0)
                             {
                                 // No overriding filters; display default filters
                                 Console.WriteLine("    Default Properties Filter Groups:");
-                                foreach (var filterGroup in defaultFilters)
+                                foreach (var filterGroup in symbol.FilterGroups)
                                 {
                                     Console.WriteLine($"      {filterGroup}");
                                 }
                                 Console.WriteLine("    Overriding Properties Filter Groups: None");
+
                             }
                             else
                             {

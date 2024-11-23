@@ -83,16 +83,23 @@ namespace ERAM_2_GEOJSON.Parsers
 
                         // Determine the appropriate FilterGroup for the symbol
                         var symbolFilters = symbolElement.Elements("GeoSymbolFilters").Elements("FilterGroup");
-                        if (!symbolFilters.Any() && mapObjectType.DefaultSymbolProperties != null)
-                        {
-                            symbolFilters = mapObjectType.DefaultSymbolProperties.GeoSymbolFilters.Select(x => new XElement("FilterGroup", x));
-                        }
 
-                        if (symbolFilters != null)
+                        // Check to see if the symbol does NOT have overiding filters
+                        if (symbolFilters.Count() == 0 && mapObjectType.DefaultSymbolProperties != null)
                         {
-                            foreach (var filter in symbolFilters)
+                            foreach (var filter in mapObjectType.DefaultSymbolProperties.GeoSymbolFilters.Select(x => new XElement("FilterGroup", x)))
                             {
                                 geoMapSymbol.FilterGroups.Add(filter.Value);
+                        }
+                        }
+
+                        // Check to see if it does HAVE overiding filters AND that it has default symbol properties. 
+                        if (symbolFilters.Count() != 0)
+                        {
+                            geoMapSymbol.OveridingFilterGroups = new List<string>(); // Initialize as empty list for required property
+                            foreach (var filter in symbolFilters)
+                            {
+                                geoMapSymbol.OveridingFilterGroups.Add(filter.Value);
                             }
                         }
 
