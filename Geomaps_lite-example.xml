@@ -30,10 +30,20 @@
 				<Color>White</Color>
 				<Thickness>1</Thickness>
 				<GeoLineFilters>
+					<FilterGroup>1</FilterGroup>
 					<FilterGroup>2</FilterGroup>
-					<FilterGroup>8</FilterGroup>
 				</GeoLineFilters>
 			</DefaultLineProperties>
+			<DefaultSymbolProperties>
+				<SymbolStyle>VOR</SymbolStyle>
+				<BCGGroup>14</BCGGroup>
+				<Color>White</Color>
+				<FontSize>2</FontSize>
+				<GeoSymbolFilters>
+					<FilterGroup>19</FilterGroup>
+					<FilterGroup>20</FilterGroup>
+				</GeoSymbolFilters>
+			</DefaultSymbolProperties>
 			<GeoMapLine>
 				<LineObjectId>BUF</LineObjectId>
 				<StartLatitude>42244500N</StartLatitude>
@@ -59,7 +69,33 @@
 				<EndXSpherical>0.13611118633771</EndXSpherical>
 				<EndYSpherical>-0.72769391952317</EndYSpherical>
 				<EndZSpherical>0.672261336418176</EndZSpherical>
+				<GeoLineFilters>
+					<FilterGroup>3</FilterGroup>
+					<FilterGroup>4</FilterGroup>
+				</GeoLineFilters>
 			</GeoMapLine>
+			<GeoMapSymbol>
+				<SymbolId>EKN</SymbolId>
+				<SymbolCode>K6</SymbolCode>
+				<Latitude>38545197N</Latitude>
+				<Longitude>080055738W</Longitude>
+				<XSpherical>0.134138625451551</XSpherical>
+				<YSpherical>-0.76852203191577</YSpherical>
+				<ZSpherical>0.62560428037381</ZSpherical>
+			</GeoMapSymbol>
+			<GeoMapSymbol>
+				<SymbolId>DXO</SymbolId>
+				<SymbolCode>K5</SymbolCode>
+				<Latitude>42124729N</Latitude>
+				<Longitude>083215999W</Longitude>
+				<XSpherical>0.085815058490572</XSpherical>
+				<YSpherical>-0.73791728360888</YSpherical>
+				<ZSpherical>0.66941307000054</ZSpherical>
+				<GeoSymbolFilters>
+					<FilterGroup>5</FilterGroup>
+					<FilterGroup>6</FilterGroup>
+				</GeoSymbolFilters>
+			</GeoMapSymbol>
 		</GeoMapObjectType>
 		<GeoMapObjectType>
 			<!-- ** Repeat group hdr "ApproachControl 1" for stylesheet performance ** -->

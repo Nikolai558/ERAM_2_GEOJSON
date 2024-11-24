@@ -40,8 +40,7 @@ namespace ERAM_2_GEOJSON
                             switch (symbol.OverridingFilterGroups?.Count > 0)
                             {
                                 case true:
-                                    Console.WriteLine("    Default Properties Filter Groups: None");
-                                    Console.WriteLine("    Overriding Properties Filter Groups:");
+                                    Console.WriteLine("    Using Overriding Properties Filter Groups:");
                                     foreach (var filterGroup in symbol.OverridingFilterGroups!)
                                     {
                                         Console.WriteLine($"      {filterGroup}");
@@ -49,17 +48,15 @@ namespace ERAM_2_GEOJSON
                                     break;
 
                                 case false when symbol.FilterGroups.Count > 0:
-                                    Console.WriteLine("    Default Properties Filter Groups:");
+                                    Console.WriteLine("    Using Default Properties Filter Groups:");
                                     foreach (var filterGroup in symbol.FilterGroups)
                                     {
                                         Console.WriteLine($"      {filterGroup}");
                                     }
-                                    Console.WriteLine("    Overriding Properties Filter Groups: None");
                                     break;
 
                                 default:
-                                    Console.WriteLine("    Default Properties Filter Groups: None");
-                                    Console.WriteLine("    Overriding Properties Filter Groups: None");
+                                    Console.WriteLine("    WARNING: No default or overriding Properties Filter Groups not found");
                                     break;
                             }
                         }
@@ -77,8 +74,7 @@ namespace ERAM_2_GEOJSON
                             switch (line.OverridingFilterGroups?.Count > 0)
                             {
                                 case true:
-                                    Console.WriteLine("    Default Properties Filter Groups: None");
-                                    Console.WriteLine("    Overriding Properties Filter Groups:");
+                                    Console.WriteLine("    Using Overriding Properties Filter Groups:");
                                     foreach (var filterGroup in line.OverridingFilterGroups!)
                                     {
                                         Console.WriteLine($"      {filterGroup}");
@@ -86,17 +82,15 @@ namespace ERAM_2_GEOJSON
                                     break;
 
                                 case false when line.FilterGroups.Count > 0:
-                                    Console.WriteLine("    Default Properties Filter Groups:");
+                                    Console.WriteLine("    Using Default Properties Filter Groups:");
                                     foreach (var filterGroup in line.FilterGroups)
                                     {
                                         Console.WriteLine($"      {filterGroup}");
                                     }
-                                    Console.WriteLine("    Overriding Properties Filter Groups: None");
                                     break;
 
                                 default:
-                                    Console.WriteLine("    Default Properties Filter Groups: None");
-                                    Console.WriteLine("    Overriding Properties Filter Groups: None");
+                                    Console.WriteLine("    WARNING: No default or overriding Properties Filter Groups not found");
                                     break;
                             }
                         }
