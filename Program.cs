@@ -21,42 +21,36 @@ namespace ERAM_2_GEOJSON
                 foreach (var record in geoMapRecords)
                 {
                     Console.WriteLine($"GeoMap ID: {record.GeomapId}");
-                    Console.WriteLine($"Label Line 1: {record.LabelLine1}");
-                    Console.WriteLine($"Label Line 2: {record.LabelLine2}");
+                    Console.WriteLine($"  Label Line 1: {record.LabelLine1}");
+                    Console.WriteLine($"  Label Line 2: {record.LabelLine2}");
 
                     foreach (var objectType in record.ObjectTypes)
                     {
-                        Console.WriteLine($"  Object Type: {objectType.MapObjectType}");
-                        Console.WriteLine($"  Map Group ID: {objectType.MapGroupId}");
+                        Console.WriteLine($"    Object Type: {objectType.MapObjectType}");
+                        Console.WriteLine($"    Map Group ID: {objectType.MapGroupId}");
 
                         // Display GeoMapSymbol details including overriding and default filter groups
                         foreach (var symbol in objectType.Symbols)
                         {
-                            Console.WriteLine($"    Symbol ID: {symbol.SymbolId}");
-                            Console.WriteLine($"    Latitude: {symbol.Latitude}");
-                            Console.WriteLine($"    Longitude: {symbol.Longitude}");
+                            Console.WriteLine($"      Symbol ID: {symbol.SymbolId}");
+                            Console.WriteLine($"        Latitude: {symbol.Latitude}");
+                            Console.WriteLine($"        Longitude: {symbol.Longitude}");
 
                             // Using switch to determine which filter groups to display
                             switch (symbol.OverridingFilterGroups?.Count > 0)
                             {
                                 case true:
-                                    Console.WriteLine("    Using Overriding Properties Filter Groups:");
-                                    foreach (var filterGroup in symbol.OverridingFilterGroups!)
-                                    {
-                                        Console.WriteLine($"      {filterGroup}");
-                                    }
+                                    Console.WriteLine("        Using Overriding Properties Filter Groups: " +
+                                                      string.Join(", ", symbol.OverridingFilterGroups!));
                                     break;
 
                                 case false when symbol.FilterGroups.Count > 0:
-                                    Console.WriteLine("    Using Default Properties Filter Groups:");
-                                    foreach (var filterGroup in symbol.FilterGroups)
-                                    {
-                                        Console.WriteLine($"      {filterGroup}");
-                                    }
+                                    Console.WriteLine("        Using Default Properties Filter Groups: " +
+                                                      string.Join(", ", symbol.FilterGroups));
                                     break;
 
                                 default:
-                                    Console.WriteLine("    WARNING: No default or overriding Properties Filter Groups not found");
+                                    Console.WriteLine("        WARNING: No default or overriding Properties Filter Groups not found");
                                     break;
                             }
                         }
@@ -64,33 +58,28 @@ namespace ERAM_2_GEOJSON
                         // Display GeoMapLine details including overriding and default filter groups
                         foreach (var line in objectType.Lines)
                         {
-                            Console.WriteLine($"    Line Object ID: {line.LineObjectId}");
-                            Console.WriteLine($"    Start Latitude: {line.StartLatitude}");
-                            Console.WriteLine($"    Start Longitude: {line.StartLongitude}");
-                            Console.WriteLine($"    End Latitude: {line.EndLatitude}");
-                            Console.WriteLine($"    End Longitude: {line.EndLongitude}");
+                            Console.WriteLine($"      Line Object ID: {line.LineObjectId}");
+                            Console.WriteLine($"        Start Latitude: {line.StartLatitude}");
+                            Console.WriteLine($"        Start Longitude: {line.StartLongitude}");
+                            Console.WriteLine($"        End Latitude: {line.EndLatitude}");
+                            Console.WriteLine($"        End Longitude: {line.EndLongitude}");
 
                             // Using switch to determine which filter groups to display
                             switch (line.OverridingFilterGroups?.Count > 0)
+
                             {
                                 case true:
-                                    Console.WriteLine("    Using Overriding Properties Filter Groups:");
-                                    foreach (var filterGroup in line.OverridingFilterGroups!)
-                                    {
-                                        Console.WriteLine($"      {filterGroup}");
-                                    }
+                                    Console.WriteLine("        Using Overriding Properties Filter Groups: " +
+                                                      string.Join(", ", line.OverridingFilterGroups!));
                                     break;
 
                                 case false when line.FilterGroups.Count > 0:
-                                    Console.WriteLine("    Using Default Properties Filter Groups:");
-                                    foreach (var filterGroup in line.FilterGroups)
-                                    {
-                                        Console.WriteLine($"      {filterGroup}");
-                                    }
+                                    Console.WriteLine("        Using Default Properties Filter Groups: " +
+                                                      string.Join(", ", line.FilterGroups));
                                     break;
 
                                 default:
-                                    Console.WriteLine("    WARNING: No default or overriding Properties Filter Groups not found");
+                                    Console.WriteLine("        WARNING: No default or overriding Properties Filter Groups not found");
                                     break;
                             }
                         }
