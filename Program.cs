@@ -1,5 +1,6 @@
 ﻿using System;
 using ERAM_2_GEOJSON.Parsers;
+using ERAM_2_GEOJSON.Helpers;
 
 namespace ERAM_2_GEOJSON
 {
@@ -7,6 +8,16 @@ namespace ERAM_2_GEOJSON
     {
         static void Main(string[] args)
         {
+            // Test coordinate conversion with DMS value
+            string dmsValue = "42124729N";
+            Console.WriteLine("Testing DMS to Decimal Conversion:");
+            Console.WriteLine("Input DMS: " + dmsValue);
+            double decimalValue = CoordinateConverter.ConvertDMSToDecimal(dmsValue);
+            Console.WriteLine("Expected Decimal Value: 42.21313611");
+            Console.WriteLine("Actual Decimal Value: " + decimalValue);
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+
             // Get the current directory and XML file path
             string currentDirectory = System.IO.Directory.GetCurrentDirectory();
             string inputXmlPath = $"{currentDirectory}\\Geomaps_lite-example.xml";
@@ -50,7 +61,7 @@ namespace ERAM_2_GEOJSON
                                     break;
 
                                 default:
-                                    Console.WriteLine("        WARNING: No default or overriding Properties Filter Groups not found");
+                                    Console.WriteLine("        WARNING: No default or overriding Properties Filter Groups found");
                                     break;
                             }
                         }
@@ -66,7 +77,6 @@ namespace ERAM_2_GEOJSON
 
                             // Using switch to determine which filter groups to display
                             switch (line.OverridingFilterGroups?.Count > 0)
-
                             {
                                 case true:
                                     Console.WriteLine("        Using Overriding Properties Filter Groups: " +
@@ -79,7 +89,7 @@ namespace ERAM_2_GEOJSON
                                     break;
 
                                 default:
-                                    Console.WriteLine("        WARNING: No default or overriding Properties Filter Groups not found");
+                                    Console.WriteLine("        WARNING: No default or overriding Properties Filter Groups found");
                                     break;
                             }
                         }

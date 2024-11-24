@@ -1,4 +1,6 @@
-﻿namespace ERAM_2_GEOJSON.Helpers
+﻿using System;
+
+namespace ERAM_2_GEOJSON.Helpers
 {
     public class CoordinateConverter
     {
@@ -16,44 +18,51 @@
                 throw new ArgumentException("Invalid DMS format. Direction must be 'N', 'S', 'E', or 'W'.");
             }
 
-            // Extract the degree, minute, and second components
-            string degreesPart = dms.Substring(0, dms.Length - 6);
-            string minutesPart = dms.Substring(dms.Length - 6, 2);
-            string secondsPart = dms.Substring(dms.Length - 4, 2);
-            string decimalSecondsPart = dms.Length > 7 ? dms.Substring(dms.Length - 3, 1) : "0";
+            // Determine if the input is latitude or longitude based on the length
+            bool isLatitude = (dms.Length == 9); // Latitude should have 9 characters, including the direction
 
+            // Extract the degree, minute, and second components for latitude and longitude accordingly
+            string degreesPart, minutesPart, secondsPart, decimalSecondsPart;
+
+            if (isLatitude)
+            {
+                degreesPart = dms.Substring(0, 2); // First 2 characters for degrees
+                minutesPart = dms.Substring(2, 2); // Next 2 characters for minutes
+                secondsPart = dms.Substring(4, 2); // Next 2 characters for seconds
+                decimalSecondsPart = dms.Substring(6, dms.Length - 7); // Remaining characters before direction for decimalSeconds
+            }
+            else
+            {
+                degreesPart = dms.Substring(0, 3); // First 3 characters for degrees (longitude)
+                minutesPart = dms.Substring(3, 2); // Next 2 characters for minutes
+                secondsPart = dms.Substring(5, 2); // Next 2 characters for seconds
+                decimalSecondsPart = dms.Substring(7, dms.Length - 8); // Remaining characters before direction for decimalSeconds
+            }
+
+            // Convert string components to integers or doubles
             if (!int.TryParse(degreesPart, out int degrees) ||
                 !int.TryParse(minutesPart, out int minutes) ||
-                !int.TryParse(secondsPart, out int seconds) ||
-                !int.TryParse(decimalSecondsPart, out int decimalSeconds))
+                !int.TryParse(secondsPart, out int seconds))
             {
                 throw new ArgumentException("DMS components are not in the correct format.");
             }
 
-            // Validate degrees, minutes, and seconds
-            if (minutes < 0 || minutes >= 60 || seconds < 0 || seconds >= 60)
+            double decimalSeconds = decimalSecondsPart == string.Empty ? 0.0 : Convert.ToDouble("0." + decimalSecondsPart);
+
+            // Add decimalSeconds to seconds
+            double secondsPlusDecimalSeconds = seconds + decimalSeconds;
+
+            // Validate minutes and seconds ranges
+            if (minutes < 0 || minutes >= 60 || secondsPlusDecimalSeconds < 0 || secondsPlusDecimalSeconds >= 60)
             {
                 throw new ArgumentException("Invalid DMS values. Minutes and seconds must be between 0 and 59.");
             }
 
-            // Ensure degrees are in a valid range for latitude and longitude
-            if (direction == 'N' || direction == 'S')
-            {
-                if (degrees < 0 || degrees > 90)
-                {
-                    throw new ArgumentException("Invalid DMS values. Latitude degrees must be between 0 and 90.");
-                }
-            }
-            else if (direction == 'E' || direction == 'W')
-            {
-                if (degrees < 0 || degrees > 180)
-                {
-                    throw new ArgumentException("Invalid DMS values. Longitude degrees must be between 0 and 180.");
-                }
-            }
-
             // Convert DMS to decimal
-            double decimalValue = degrees + (minutes / 60.0) + ((seconds + (decimalSeconds / 10.0)) / 3600.0);
+            double roundedMinutes = Math.Round(minutes / 60.0, 8);
+            double roundedSecondsPlusDecimalSeconds = Math.Round((secondsPlusDecimalSeconds / 3600.0), 8);
+
+            double decimalValue = degrees + roundedMinutes + roundedSecondsPlusDecimalSeconds;
 
             // Adjust for direction
             if (direction == 'S' || direction == 'W')
@@ -61,6 +70,7 @@
                 decimalValue *= -1;
             }
 
+            // Round to 8 decimal places
             return Math.Round(decimalValue, 8);
         }
     }
