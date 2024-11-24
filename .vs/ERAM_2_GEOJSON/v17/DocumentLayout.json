@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|c:\\users\\ksand\\source\\repos\\eram_2_geojson\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|c:\\users\\ksand\\source\\repos\\eram_2_geojson\\helpers\\coordinateconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|solutionrelative:helpers\\coordinateconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|c:\\users\\ksand\\source\\repos\\eram_2_geojson\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,27 +23,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-24T17:07:33.969Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "CoordinateConverter.cs",
               "DocumentMoniker": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Helpers\\CoordinateConverter.cs",
               "RelativeDocumentMoniker": "Helpers\\CoordinateConverter.cs",
               "ToolTip": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Helpers\\CoordinateConverter.cs",
               "RelativeToolTip": "Helpers\\CoordinateConverter.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAiwEMAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAABYAAAAAAAAAAAAQwDwAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-24T15:47:05.939Z",
+              "WhenOpened": "2024-11-24T17:16:29.109Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-24T17:16:02.736Z",
               "EditorCaption": ""
             }
           ]

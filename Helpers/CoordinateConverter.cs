@@ -60,7 +60,7 @@ namespace ERAM_2_GEOJSON.Helpers
 
             // Convert DMS to decimal
             double roundedMinutes = Math.Round(minutes / 60.0, 8);
-            double roundedSecondsPlusDecimalSeconds = Math.Round((secondsPlusDecimalSeconds / 3600.0), 8);
+            double roundedSecondsPlusDecimalSeconds = Math.Round(secondsPlusDecimalSeconds / 3600.0, 8);
 
             double decimalValue = degrees + roundedMinutes + roundedSecondsPlusDecimalSeconds;
 
