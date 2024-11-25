@@ -367,27 +367,27 @@ Custom Properties will be information from the .xml that is not needed to make t
 
 Not all tags and elements will carry over into the geojson; Below you will find information for exactly how this information is handled and when it is passed in to the .geojson.
 
-In order to avoid future confliction with other .geojson readers, the properties keys will be the tag name from the .xml but prefixed with "ksanders7070_".
+In order to avoid future confliction with other .geojson readers, the properties keys will be the tag name from the .xml but prefixed with "E2G_".
 
 FOR LINES:
 
 - If the user elects to have Custom Properties turned on, the program will insert a custom key/values into the properties section of the feature detailing the .xml's MapObjectType, MapGroupId, and LineObjectId.
   - Format:
-    - "ksanders7070_MapObjectType": "`<GeoMapObjectType>`"
-    - "ksanders7070_MapGroupId": "`<MapGroupId>`"
-    - "ksanders7070_LineObjectId": "`<LineObjectId>`"
+    - "E2G_MapObjectType": "`<GeoMapObjectType>`"
+    - "E2G_MapGroupId": "`<MapGroupId>`"
+    - "E2G_LineObjectId": "`<LineObjectId>`"
   - Example:
-    - "ksanders7070_MapObjectType": "ApproachControl"
-    - "ksanders7070_MapGroupId": "1"
-    - "ksanders7070_LineObjectId": "DTW"
+    - "E2G_MapObjectType": "ApproachControl"
+    - "E2G_MapGroupId": "1"
+    - "E2G_LineObjectId": "DTW"
 
 FOR SYMBOLS:
 
 - If the user elects to have Custom Properties turned on, the program will insert a custom key/values into the properties section of the feature detailing the .xml's MapObjectType.
   - Format:
-    - "ksanders7070_MapObjectType": "`<MapObjectType>`"
+    - "E2G_MapObjectType": "`<MapObjectType>`"
   - Example:
-    - "ksanders7070_MapObjectType": "WAYPOINT"
+    - "E2G_MapObjectType": "WAYPOINT"
 
 FOR TEXT:
 
@@ -395,10 +395,10 @@ FOR TEXT:
 
 - Regardless if the user elects to have custom properties turned on or not, the program will create a property key of "text" and assign it the value for the .xml's tag TextLine.
   - Format:
-    - "ksanders7070_MapObjectType": "`<MapObjectType>`"
+    - "E2G_MapObjectType": "`<MapObjectType>`"
     - "text": ["`<TextLine>`"]
   - Example:
-    - "ksanders7070_MapObjectType": "WAYPOINT"
+    - "E2G_MapObjectType": "WAYPOINT"
     - "text": ["ALEEE"]
 
 - When cdreating a Text feature in the `_Text.geojson`,the program will also create a feature for this text element as a "Symbol" in the `_Symbols.geojson` file using the same FilterGroup value. (i.e., after creating the text feature, run the symbol feature aswell but add the same `"text": ["<TextLine>"]` property in the symbols file.)
@@ -416,5 +416,5 @@ In the example below, the user elected to have custom properties included.
 Example
 
 ```json
-{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-108.79043292472375,40.8506145555433],[-102.2181888812155,37.06641395317544],[-108.9552885445442,40.80903657260835]],[[-108.3837890625,40.46711432758179],[-105.2,37.1]]]},"properties":{"ksanders7070_MapObjectType":"ApproachControl","ksanders7070_MapGroupId":"1","ksanders7070_LineObjectId":"BUF"}},{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-109.1,41.8],[-103.1,38.1],[-109.2,41.9]],[[-107.2,41.3],[-108.2,42.3]]]},"properties":{"ksanders7070_MapObjectType":"ApproachControl","ksanders7070_MapGroupId":"2","ksanders7070_LineObjectId":"BUF"}},{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-111.1,42.8],[-108.1,39.1],[-110.2,42.9]],[[-105.2,40.70000000000001],[-105.3,40.8]]]},"properties":{"ksanders7070_MapObjectType":"ApproachControl","ksanders7070_MapGroupId":"1","ksanders7070_LineObjectId":"DTW"}}]}
+{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-108.79043292472375,40.8506145555433],[-102.2181888812155,37.06641395317544],[-108.9552885445442,40.80903657260835]],[[-108.3837890625,40.46711432758179],[-105.2,37.1]]]},"properties":{"E2G_MapObjectType":"ApproachControl","E2G_MapGroupId":"1","E2G_LineObjectId":"BUF"}},{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-109.1,41.8],[-103.1,38.1],[-109.2,41.9]],[[-107.2,41.3],[-108.2,42.3]]]},"properties":{"E2G_MapObjectType":"ApproachControl","E2G_MapGroupId":"2","E2G_LineObjectId":"BUF"}},{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-111.1,42.8],[-108.1,39.1],[-110.2,42.9]],[[-105.2,40.70000000000001],[-105.3,40.8]]]},"properties":{"E2G_MapObjectType":"ApproachControl","E2G_MapGroupId":"1","E2G_LineObjectId":"DTW"}}]}
 ```

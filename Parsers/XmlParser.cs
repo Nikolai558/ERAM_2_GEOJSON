@@ -4,27 +4,23 @@ using ERAM_2_GEOJSON.Models;
 
 namespace ERAM_2_GEOJSON.Parsers
 {
-    // The XmlParser class is responsible for parsing the XML file and converting it into a collection of GeoMapRecords
     public class XmlParser
     {
-        // Parses an XML file at the given path into a list of GeoMapRecord objects
         public List<GeoMapRecord> Parse(string xmlFilePath)
         {
             XDocument xmlDoc = XDocument.Load(xmlFilePath);
             List<GeoMapRecord> geoMapRecords = new List<GeoMapRecord>();
 
-            // Loop through each GeoMapRecord element in the XML
             foreach (XElement geoMapRecordElement in xmlDoc.Descendants("GeoMapRecord"))
             {
                 GeoMapRecord record = new GeoMapRecord
                 {
                     GeomapId = geoMapRecordElement.Element("GeomapId")?.Value ?? "Unknown",
-                    LabelLine1 = geoMapRecordElement.Element("LabelLine1")?.Value,
-                    LabelLine2 = geoMapRecordElement.Element("LabelLine2")?.Value,
+                    LabelLine1 = geoMapRecordElement.Element("LabelLine1")?.Value ?? "N/A",
+                    LabelLine2 = geoMapRecordElement.Element("LabelLine2")?.Value ?? "N/A",
                     ObjectTypes = new List<GeoMapObjectType>()
                 };
 
-                // Loop through each GeoMapObjectType within a GeoMapRecord
                 foreach (XElement objectTypeElement in geoMapRecordElement.Elements("GeoMapObjectType"))
                 {
                     GeoMapObjectType mapObjectType = new GeoMapObjectType
@@ -32,13 +28,14 @@ namespace ERAM_2_GEOJSON.Parsers
                         MapObjectType = objectTypeElement.Element("MapObjectType")?.Value ?? "Unknown",
                         MapGroupId = objectTypeElement.Element("MapGroupId")?.Value ?? "0",
                         Lines = new List<GeoMapLine>(),
-                        Symbols = new List<GeoMapSymbol>(),
-                        DefaultLineProperties = ParseDefaultLineProperties(objectTypeElement.Element("DefaultLineProperties")),
-                        DefaultSymbolProperties = ParseDefaultSymbolProperties(objectTypeElement.Element("DefaultSymbolProperties")),
-                        DefaultTextProperties = ParseDefaultTextProperties(objectTypeElement.Element("TextDefaultProperties"))
+                        Symbols = new List<GeoMapSymbol>()
                     };
 
-                    // Parse GeoMapLine elements within GeoMapObjectType
+                    // Handling DefaultLineProperties, DefaultSymbolProperties, DefaultTextProperties
+                    mapObjectType.DefaultLineProperties = ParseDefaultLineProperties(objectTypeElement.Element("DefaultLineProperties"));
+                    mapObjectType.DefaultSymbolProperties = ParseDefaultSymbolProperties(objectTypeElement.Element("DefaultSymbolProperties"));
+                    mapObjectType.DefaultTextProperties = ParseDefaultTextProperties(objectTypeElement.Element("DefaultTextProperties"));
+
                     foreach (XElement lineElement in objectTypeElement.Elements("GeoMapLine"))
                     {
                         GeoMapLine mapLine = new GeoMapLine
@@ -69,7 +66,6 @@ namespace ERAM_2_GEOJSON.Parsers
                         mapObjectType.Lines.Add(mapLine);
                     }
 
-                    // Parse GeoMapSymbol elements within GeoMapObjectType
                     foreach (XElement symbolElement in objectTypeElement.Elements("GeoMapSymbol"))
                     {
                         GeoMapSymbol geoMapSymbol = new GeoMapSymbol
@@ -85,8 +81,9 @@ namespace ERAM_2_GEOJSON.Parsers
                             } : null
                         };
 
-                        // Determine if overriding filter groups are defined, otherwise use default
+                        // Determine the appropriate FilterGroup for the symbol
                         var symbolFilters = symbolElement.Elements("GeoSymbolFilters").Elements("FilterGroup");
+
                         if (symbolFilters.Any())
                         {
                             geoMapSymbol.OverridingFilterGroups = new List<string>();
@@ -112,38 +109,42 @@ namespace ERAM_2_GEOJSON.Parsers
             return geoMapRecords;
         }
 
-        // Helper method to parse DefaultLineProperties
+        // Helper Methods to Parse Default Properties
         private DefaultLineProperties? ParseDefaultLineProperties(XElement? element)
         {
             if (element == null) return null;
 
-            return new DefaultLineProperties
+            DefaultLineProperties defaultProperties = new DefaultLineProperties
             {
                 GeoLineFilters = element.Elements("GeoLineFilters").Elements("FilterGroup").Select(e => e.Value).ToList()
             };
+
+            return defaultProperties;
         }
 
-        // Helper method to parse DefaultSymbolProperties
         private DefaultSymbolProperties? ParseDefaultSymbolProperties(XElement? element)
         {
             if (element == null) return null;
 
-            return new DefaultSymbolProperties
+            DefaultSymbolProperties defaultProperties = new DefaultSymbolProperties
             {
                 SymbolStyle = element.Element("SymbolStyle")?.Value ?? "default",
                 GeoSymbolFilters = element.Elements("GeoSymbolFilters").Elements("FilterGroup").Select(e => e.Value).ToList()
             };
+
+            return defaultProperties;
         }
 
-        // Helper method to parse DefaultTextProperties
         private DefaultTextProperties? ParseDefaultTextProperties(XElement? element)
         {
             if (element == null) return null;
 
-            return new DefaultTextProperties
+            DefaultTextProperties defaultProperties = new DefaultTextProperties
             {
                 GeoTextFilters = element.Elements("GeoTextFilters").Elements("FilterGroup").Select(e => e.Value).ToList()
             };
+
+            return defaultProperties;
         }
     }
 }

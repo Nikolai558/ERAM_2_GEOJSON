@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Xml;
 using ERAM_2_GEOJSON.Models;
-using Newtonsoft.Json;
-
+using ERAM_2_GEOJSON.Helpers;
 
 namespace ERAM_2_GEOJSON.GeoJson
 {
@@ -15,57 +16,68 @@ namespace ERAM_2_GEOJSON.GeoJson
             {
                 foreach (var objectType in record.ObjectTypes)
                 {
-                    // Handle Lines
-                    GenerateLinesGeoJson(objectType.Lines, outputDirectory, customProperties, record.GeomapId, record.LabelLine1, record.LabelLine2);
-
-                    // Handle Symbols and Text similarly...
+                    // Generate GeoJSON for lines
+                    foreach (var line in objectType.Lines)
+                    {
+                        GenerateLinesGeoJson(line, objectType, record, outputDirectory, customProperties);
+                    }
                 }
             }
         }
 
-        private void GenerateLinesGeoJson(List<GeoMapLine> lines, string outputDirectory, bool customProperties, string geomapId, string labelLine1, string labelLine2)
+        private void GenerateLinesGeoJson(GeoMapLine line, GeoMapObjectType objectType, GeoMapRecord record, string outputDirectory, bool customProperties)
         {
-            // Example logic to generate GeoJSON for lines and write to a file
-            var features = new List<object>();
-
-            foreach (var line in lines)
+            // Group lines by FilterGroup
+            var filterGroupIds = line.OverridingFilterGroups ?? line.FilterGroups;
+            foreach (var filterGroupId in filterGroupIds)
             {
-                double startLat = Helpers.CoordinateConverter.ConvertDMSToDecimal(line.StartLatitude);
-                double startLon = Helpers.CoordinateConverter.ConvertDMSToDecimal(line.StartLongitude);
-                double endLat = Helpers.CoordinateConverter.ConvertDMSToDecimal(line.EndLatitude);
-                double endLon = Helpers.CoordinateConverter.ConvertDMSToDecimal(line.EndLongitude);
+                string filterDirectory = Path.Combine(outputDirectory, record.GeomapId, $"Filter_{filterGroupId:D2}");
+                Directory.CreateDirectory(filterDirectory);
 
-                var feature = new
+                // Convert line coordinates to GeographicPosition
+                var coordinates = new List<IPosition>
                 {
-                    type = "Feature",
-                    geometry = new
-                    {
-                        type = "LineString",
-                        coordinates = new[]
-                        {
-                            new[] { startLon, startLat },
-                            new[] { endLon, endLat }
-                        }
-                    },
-                    properties = new Dictionary<string, object>()
+                    new Position(ConvertDMSToDecimal(line.StartLatitude), ConvertDMSToDecimal(line.StartLongitude)),
+                    new Position(ConvertDMSToDecimal(line.EndLatitude), ConvertDMSToDecimal(line.EndLongitude))
                 };
 
-                if (customProperties)
-                {
-                    feature.properties.Add("ksanders7070_MapObjectType", line.LineObjectId);
-                }
+                LineString lineString = new LineString(coordinates);
+                Feature feature = new Feature(lineString, GenerateProperties(line, objectType, record, customProperties));
 
-                features.Add(feature);
+                // Write GeoJSON to file
+                string geoJsonFilePath = Path.Combine(filterDirectory, $"Filter_{filterGroupId:D2}_Lines.geojson");
+                WriteGeoJsonFile(geoJsonFilePath, feature);
             }
+        }
 
-            var geoJson = new
+        private IDictionary<string, object> GenerateProperties(GeoMapLine line, GeoMapObjectType objectType, GeoMapRecord record, bool customProperties)
+        {
+            var properties = new Dictionary<string, object>
             {
-                type = "FeatureCollection",
-                features = features
+                { "E2G_MapObjectType", objectType.MapObjectType },
+                { "E2G_MapGroupId", objectType.MapGroupId },
+                { "E2G_LineObjectId", line.LineObjectId }
             };
 
-            string outputPath = Path.Combine(outputDirectory, $"{geomapId}_{labelLine1}_{labelLine2}_Lines.geojson");
-            File.WriteAllText(outputPath, JsonConvert.SerializeObject(geoJson, Newtonsoft.Json.Formatting.Indented));
+            if (customProperties)
+            {
+                properties.Add("custom", "true");
+            }
+
+            return properties;
+        }
+
+        private void WriteGeoJsonFile(string filePath, Feature feature)
+        {
+            FeatureCollection featureCollection = new FeatureCollection(new List<Feature> { feature });
+            string geoJson = Newtonsoft.Json.JsonConvert.SerializeObject(featureCollection, Newtonsoft.Json.Formatting.Indented);
+
+            File.WriteAllText(filePath, geoJson);
+        }
+
+        private double ConvertDMSToDecimal(string dms)
+        {
+            return CoordinateConverter.ConvertDMSToDecimal(dms);
         }
     }
 }

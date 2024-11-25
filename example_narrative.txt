@@ -1,0 +1,23 @@
+LINES-LINES_ONLY
+	Filter_01\
+		Filter_01_Lines.geojson
+			- Feature 1:
+				- MultiLineString
+					- String 1:
+						- Contains 2 line segments that should be combined into a single three point string. This is the 1st and 2nd GeoMapLine objects in the xml.
+					- String 2:
+						- Contains 2 line segments that should be combined into a single three point string. This is the 3rd and 4th GeoMapLine objects in the xml.
+				- Properties:
+					- "E2G_MapObjectType": "ApproachControl"
+					- "E2G_MapGroupId": "1"
+					- "E2G_LineObjectId": "AAA"
+			- Feature 2:
+				- MultiLineString
+					- String 1:
+						- Contains 2 line segments that should be combined into a single three point string. This is the 5th and 6th GeoMapLine objects in the xml.
+					- String 2:
+						- Contains 1 line segment that should be combined into a single 2 point string. This is the 7th GeoMapLine objects in the xml.
+				- Properties:
+					- "E2G_MapObjectType": "ApproachControl"
+					- "E2G_MapGroupId": "2"
+					- "E2G_LineObjectId": "AAA"
