@@ -59,10 +59,7 @@ namespace ERAM_2_GEOJSON.Helpers
             }
 
             // Convert DMS to decimal
-            double roundedMinutes = Math.Round(minutes / 60.0, 8);
-            double roundedSecondsPlusDecimalSeconds = Math.Round(secondsPlusDecimalSeconds / 3600.0, 8);
-
-            double decimalValue = degrees + roundedMinutes + roundedSecondsPlusDecimalSeconds;
+            double decimalValue = degrees + (minutes / 60.0) + (secondsPlusDecimalSeconds / 3600.0);
 
             // Adjust for direction
             if (direction == 'S' || direction == 'W')
@@ -70,8 +67,7 @@ namespace ERAM_2_GEOJSON.Helpers
                 decimalValue *= -1;
             }
 
-            // Round to 8 decimal places
-            return Math.Round(decimalValue, 8);
+            return decimalValue;
         }
     }
 }
