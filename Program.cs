@@ -21,7 +21,7 @@ namespace ERAM_2_GEOJSON
             {
                 args = new string[]
                 {
-                    @"C:\Users\ksand\source\repos\ERAM-GEOJSON\GENERAL_RESOURCES\",
+                    @"C:\Users\ksand\source\repos\ERAM_2_GEOJSON\GENERAL_RESOURCES\",
                     @"C:\Users\ksand\downloads\",
                     "true"
                 };
@@ -73,7 +73,7 @@ namespace ERAM_2_GEOJSON
                 List<GeoMapRecord> geoMapRecords = GeomapXmlParser.Parse(geomapXmlFilePath);
 
                 // Create the output directory
-                string outputDirectory = Path.Combine(userSelectedOutputDirectory, "ERAM-GEOJSON_OUTPUT");
+                string outputDirectory = Path.Combine(userSelectedOutputDirectory, "ERAM_2_GEOJSON_OUTPUT");
                 DirectoryHandler.CreateOutputDirectory(outputDirectory);
 
                 // Generate GeoJSON

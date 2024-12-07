@@ -22,6 +22,9 @@ namespace ERAM_2_GEOJSON.Helpers
             {
                 string recordBasePath = Path.Combine(outputDirectory, $"{record.GeomapId}_{record.LabelLine1}-{record.LabelLine2}");
 
+                // Ensure the base directory for the record is created
+                Directory.CreateDirectory(recordBasePath);
+
                 foreach (var objectType in record.ObjectTypes)
                 {
                     // Process Lines
@@ -108,9 +111,14 @@ namespace ERAM_2_GEOJSON.Helpers
                 foreach (var filter in objectType.DefaultLineFilters)
                 {
                     string filterKey = GetFilterKey(filter);
-                    if (!featureCollectionsByFilter.ContainsKey(filterKey))
+                    string filterPath = Path.Combine(recordBasePath, filterKey);
+
+                    // Ensure the directory exists for this filter group
+                    Directory.CreateDirectory(filterPath);
+
+                    if (!featureCollectionsByFilter.ContainsKey(filterPath))
                     {
-                        featureCollectionsByFilter[filterKey] = new FeatureCollection();
+                        featureCollectionsByFilter[filterPath] = new FeatureCollection();
                     }
 
                     var lineStrings = group.Value.Select(line => new LineString(line));
@@ -124,7 +132,7 @@ namespace ERAM_2_GEOJSON.Helpers
                         properties.Add("E2G_LineObjectId", group.Key.LineObjectId);
                     }
 
-                    featureCollectionsByFilter[filterKey].Features.Add(new Feature(multiLineString, properties));
+                    featureCollectionsByFilter[filterPath].Features.Add(new Feature(multiLineString, properties));
                 }
             }
         }
@@ -142,9 +150,14 @@ namespace ERAM_2_GEOJSON.Helpers
                 foreach (var filter in symbol.AppliedSymbolFilters)
                 {
                     string filterKey = GetFilterKey(filter);
-                    if (!featureCollectionsByFilter.ContainsKey(filterKey))
+                    string filterPath = Path.Combine(recordBasePath, filterKey);
+
+                    // Ensure the directory exists for this filter group
+                    Directory.CreateDirectory(filterPath);
+
+                    if (!featureCollectionsByFilter.ContainsKey(filterPath))
                     {
-                        featureCollectionsByFilter[filterKey] = new FeatureCollection();
+                        featureCollectionsByFilter[filterPath] = new FeatureCollection();
                     }
 
                     var position = new Position(
@@ -162,7 +175,7 @@ namespace ERAM_2_GEOJSON.Helpers
                         properties.Add("E2G_SymbolId", symbol.SymbolId);
                     }
 
-                    featureCollectionsByFilter[filterKey].Features.Add(new Feature(point, properties));
+                    featureCollectionsByFilter[filterPath].Features.Add(new Feature(point, properties));
                 }
             }
         }
@@ -184,9 +197,14 @@ namespace ERAM_2_GEOJSON.Helpers
                         foreach (var filter in textObject.AppliedTextFilters)
                         {
                             string filterKey = GetFilterKey(filter);
-                            if (!featureCollectionsByFilter.ContainsKey(filterKey))
+                            string filterPath = Path.Combine(recordBasePath, filterKey);
+
+                            // Ensure the directory exists for this filter group
+                            Directory.CreateDirectory(filterPath);
+
+                            if (!featureCollectionsByFilter.ContainsKey(filterPath))
                             {
-                                featureCollectionsByFilter[filterKey] = new FeatureCollection();
+                                featureCollectionsByFilter[filterPath] = new FeatureCollection();
                             }
 
                             var position = new Position(
@@ -207,7 +225,7 @@ namespace ERAM_2_GEOJSON.Helpers
                                 properties.Add("E2G_SymbolId", symbol.SymbolId);
                             }
 
-                            featureCollectionsByFilter[filterKey].Features.Add(new Feature(point, properties));
+                            featureCollectionsByFilter[filterPath].Features.Add(new Feature(point, properties));
                         }
                     }
                 }
@@ -218,12 +236,8 @@ namespace ERAM_2_GEOJSON.Helpers
         {
             foreach (var filterKey in featureCollectionsByFilter.Keys)
             {
-                string outputFilePath = Path.Combine(outputDirectory, filterKey, $"{filterKey}_{featureType}.geojson");
+                string outputFilePath = Path.Combine(filterKey, $"{Path.GetFileName(filterKey)}_{featureType}.geojson");
 
-                // Ensure the directory exists
-                Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
-
-                // Write the GeoJSON to file
                 WriteGeoJsonToFile(featureCollectionsByFilter[filterKey], outputFilePath);
             }
         }
