@@ -47,6 +47,8 @@ namespace ERAM_2_GEOJSON.Helpers
                 throw new ArgumentException("DMS components are not in the correct format.");
             }
 
+            // If decimalSeconds is empty, assigns "0.0" as a double.
+            // if not empty, concatenates "0." with the value of decimalSecondsPart as a double.
             double decimalSeconds = decimalSecondsPart == string.Empty ? 0.0 : Convert.ToDouble("0." + decimalSecondsPart);
 
             // Add decimalSeconds to seconds

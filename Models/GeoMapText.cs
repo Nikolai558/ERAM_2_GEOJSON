@@ -1,12 +1,18 @@
-﻿namespace ERAM_2_GEOJSON.Models
+﻿using System.Collections.Generic;
+
+namespace ERAM_2_GEOJSON.MODELS
 {
-    // Represents text associated with a GeoMap symbol
     public class GeoMapText
     {
-        // Text content for the GeoMap symbol
-        public required string TextLine { get; set; }
+        public List<int> OverridingTextFilterGroups { get; set; }
+        public List<int> AppliedTextFilters { get; set; }
+        public List<string> TextLines { get; set; }
 
-        // List of filter groups for the text, initialized to an empty list
-        public List<string> FilterGroups { get; set; } = new List<string>();
+        public GeoMapText()
+        {
+            OverridingTextFilterGroups = new List<int>();
+            AppliedTextFilters = new List<int>();
+            TextLines = new List<string>();
+        }
     }
 }

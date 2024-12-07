@@ -1,4 +1,4 @@
-<Geomaps_Records xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="Geomaps.xsd">
+﻿<Geomaps_Records xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="Geomaps.xsd">
 	<!-- ******************************************************** -->
 	<!-- Local SITE ID        : ZOB                               -->
 	<!-- Local Release Version: c438a905                          -->
@@ -35,10 +35,14 @@
 			</DefaultLineProperties>
 			<GeoMapLine>
 				<LineObjectId>AAA</LineObjectId>
-				<StartLatitude>39435962N</StartLatitude><!-- 39.73322777777778 -->
-				<StartLongitude>093362346W</StartLongitude><!-- -93.60651666666666 -->
-				<EndLatitude>39341750N</EndLatitude><!-- 39.57152777777778 -->
-				<EndLongitude>085431435W</EndLongitude><!-- -85.72065277777779 -->
+				<StartLatitude>39435962N</StartLatitude>
+				<!-- 39.73322777777778 -->
+				<StartLongitude>093362346W</StartLongitude>
+				<!-- -93.60651666666666 -->
+				<EndLatitude>39341750N</EndLatitude>
+				<!-- 39.57152777777778 -->
+				<EndLongitude>085431435W</EndLongitude>
+				<!-- -85.72065277777779 -->
 				<StartXSpherical>0.142855554965995</StartXSpherical>
 				<StartYSpherical>-0.72664893492053</StartYSpherical>
 				<StartZSpherical>0.671992273611999</StartZSpherical>
@@ -48,10 +52,14 @@
 			</GeoMapLine>
 			<GeoMapLine>
 				<LineObjectId>AAA</LineObjectId>
-				<StartLatitude>39341750N</StartLatitude><!-- 39.57152777777778 -->
-				<StartLongitude>085431435W</StartLongitude><!-- -85.72065277777779 -->
-				<EndLatitude>35464577N</EndLatitude><!-- 35.779380555555555 -->
-				<EndLongitude>085584526W</EndLongitude><!-- -85.97923888888889 -->
+				<StartLatitude>39341750N</StartLatitude>
+				<!-- 39.57152777777778 -->
+				<StartLongitude>085431435W</StartLongitude>
+				<!-- -85.72065277777779 -->
+				<EndLatitude>35464577N</EndLatitude>
+				<!-- 35.779380555555555 -->
+				<EndLongitude>085584526W</EndLongitude>
+				<!-- -85.97923888888889 -->
 				<StartXSpherical>0.134762574929989</StartXSpherical>
 				<StartYSpherical>-0.72691710554631</StartYSpherical>
 				<StartZSpherical>0.673372534383761</StartZSpherical>
@@ -61,10 +69,14 @@
 			</GeoMapLine>
 			<GeoMapLine>
 				<LineObjectId>AAA</LineObjectId>
-				<StartLatitude>37164021N</StartLatitude><!-- 37.27783611111111 -->
-				<StartLongitude>096413083W</StartLongitude><!-- -96.69189722222222 -->
-				<EndLatitude>40163914N</EndLatitude><!-- 40.27753888888889 -->
-				<EndLongitude>093175823W</EndLongitude><!-- -93.29950833333334 -->
+				<StartLatitude>37164021N</StartLatitude>
+				<!-- 37.27783611111111 -->
+				<StartLongitude>096413083W</StartLongitude>
+				<!-- -96.69189722222222 -->
+				<EndLatitude>40163914N</EndLatitude>
+				<!-- 40.27753888888889 -->
+				<EndLongitude>093175823W</EndLongitude>
+				<!-- -93.29950833333334 -->
 				<StartXSpherical>0.134762574929989</StartXSpherical>
 				<StartYSpherical>-0.72691710554631</StartYSpherical>
 				<StartZSpherical>0.673372534383761</StartZSpherical>
@@ -74,10 +86,14 @@
 			</GeoMapLine>
 			<GeoMapLine>
 				<LineObjectId>AAA</LineObjectId>
-				<StartLatitude>40163914N</StartLatitude><!-- 40.27753888888889 -->
-				<StartLongitude>093175823W</StartLongitude><!-- -93.29950833333334 -->
-				<EndLatitude>37344336N</EndLatitude><!-- 37.57871111111111 -->
-				<EndLongitude>091100752W</EndLongitude><!-- -91.16875555555556 -->
+				<StartLatitude>40163914N</StartLatitude>
+				<!-- 40.27753888888889 -->
+				<StartLongitude>093175823W</StartLongitude>
+				<!-- -93.29950833333334 -->
+				<EndLatitude>37344336N</EndLatitude>
+				<!-- 37.57871111111111 -->
+				<EndLongitude>091100752W</EndLongitude>
+				<!-- -91.16875555555556 -->
 				<StartXSpherical>0.134762574929989</StartXSpherical>
 				<StartYSpherical>-0.72691710554631</StartYSpherical>
 				<StartZSpherical>0.673372534383761</StartZSpherical>
@@ -100,10 +116,14 @@
 			</DefaultLineProperties>
 			<GeoMapLine>
 				<LineObjectId>AAA</LineObjectId>
-				<StartLatitude>37164021N</StartLatitude><!-- 37.27783611111111 -->
-				<StartLongitude>096413083W</StartLongitude><!-- -96.69189722222222 -->
-				<EndLatitude>40163914N</EndLatitude><!-- 40.27753888888889 -->
-				<EndLongitude>093175823W</EndLongitude><!-- -93.29950833333334 -->
+				<StartLatitude>37164021N</StartLatitude>
+				<!-- 37.27783611111111 -->
+				<StartLongitude>096413083W</StartLongitude>
+				<!-- -96.69189722222222 -->
+				<EndLatitude>40163914N</EndLatitude>
+				<!-- 40.27753888888889 -->
+				<EndLongitude>093175823W</EndLongitude>
+				<!-- -93.29950833333334 -->
 				<StartXSpherical>0.134762574929989</StartXSpherical>
 				<StartYSpherical>-0.72691710554631</StartYSpherical>
 				<StartZSpherical>0.673372534383761</StartZSpherical>
@@ -113,10 +133,14 @@
 			</GeoMapLine>
 			<GeoMapLine>
 				<LineObjectId>AAA</LineObjectId>
-				<StartLatitude>40163914N</StartLatitude><!-- 40.27753888888889 -->
-				<StartLongitude>093175823W</StartLongitude><!-- -93.29950833333334 -->
-				<EndLatitude>37344336N</EndLatitude><!-- 37.57871111111111 -->
-				<EndLongitude>091100752W</EndLongitude><!-- -91.16875555555556 -->
+				<StartLatitude>40163914N</StartLatitude>
+				<!-- 40.27753888888889 -->
+				<StartLongitude>093175823W</StartLongitude>
+				<!-- -93.29950833333334 -->
+				<EndLatitude>37344336N</EndLatitude>
+				<!-- 37.57871111111111 -->
+				<EndLongitude>091100752W</EndLongitude>
+				<!-- -91.16875555555556 -->
 				<StartXSpherical>0.134762574929989</StartXSpherical>
 				<StartYSpherical>-0.72691710554631</StartYSpherical>
 				<StartZSpherical>0.673372534383761</StartZSpherical>
@@ -126,10 +150,14 @@
 			</GeoMapLine>
 			<GeoMapLine>
 				<LineObjectId>AAA</LineObjectId>
-				<StartLatitude>36021833N</StartLatitude><!-- 36.038425 -->
-				<StartLongitude>092083565W</StartLongitude><!-- -92.14323611111112 -->
-				<EndLatitude>35500571N</EndLatitude><!-- 35.834919444444445 -->
-				<EndLongitude>098082539W</EndLongitude><!-- -98.14038611111111 -->
+				<StartLatitude>36021833N</StartLatitude>
+				<!-- 36.038425 -->
+				<StartLongitude>092083565W</StartLongitude>
+				<!-- -92.14323611111112 -->
+				<EndLatitude>35500571N</EndLatitude>
+				<!-- 35.834919444444445 -->
+				<EndLongitude>098082539W</EndLongitude>
+				<!-- -98.14038611111111 -->
 				<StartXSpherical>0.134762574929989</StartXSpherical>
 				<StartYSpherical>-0.72691710554631</StartYSpherical>
 				<StartZSpherical>0.673372534383761</StartZSpherical>

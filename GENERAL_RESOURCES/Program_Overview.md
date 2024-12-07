@@ -283,10 +283,10 @@ Also create a folder labeled "Multi-Filter".
 
 ## DETERMINING LINES, SYMBOLS, or TEXT
 
-To determine if a coordinate is attached to a Line, Symbol, or Text, look in `<GeomapId>` > `GeoMapObjectType`
+To determine if a coordinate is attached to a Line, Symbol, or Text, look in `GeoMapObjectType`
 
-- If `GeoMapLine` it is a Linestring object.
-- If `GeoMapSymbol` it is a Symbol object.
+- If `GeoMapLine` exists in `GeoMapObjectType`, the data contained within `GeoMapLine` is line data.
+- If `GeoMapSymbol` exists in `GeoMapObjectType`, the data contained within `GeoMapSymbol` is Symbol data.
   - Exception: If there is a `GeoMapText` within `GeoMapSymbol`, change the object type from Symbol to Text.
 
 ## FILTERGROUP ASSIGNMENT

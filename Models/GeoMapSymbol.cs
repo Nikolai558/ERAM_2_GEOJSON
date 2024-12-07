@@ -1,24 +1,21 @@
-﻿namespace ERAM_2_GEOJSON.Models
+﻿using System.Collections.Generic;
+
+namespace ERAM_2_GEOJSON.MODELS
 {
-    // Represents a symbol on a GeoMap with relevant properties such as coordinates, filters, and text
     public class GeoMapSymbol
     {
-        // Unique identifier for the symbol
         public required string SymbolId { get; set; }
-
-        // Latitude coordinate of the symbol
         public required string Latitude { get; set; }
-
-        // Longitude coordinate of the symbol
         public required string Longitude { get; set; }
+        public List<int> OverridingSymbolFiltersGroups { get; set; }
+        public List<int> AppliedSymbolFilters { get; set; }
+        public List<GeoMapText> TextObjects { get; set; }
 
-        // List of filter groups for the symbol (default properties)
-        public List<string> FilterGroups { get; set; } = new List<string>();
-
-        // List of overriding filter groups for the symbol
-        public List<string>? OverridingFilterGroups { get; set; }
-
-        // Represents optional text associated with the symbol
-        public GeoMapText? GeoMapText { get; set; }
+        public GeoMapSymbol()
+        {
+            OverridingSymbolFiltersGroups = new List<int>();
+            AppliedSymbolFilters = new List<int>();
+            TextObjects = new List<GeoMapText>();
+        }
     }
 }
