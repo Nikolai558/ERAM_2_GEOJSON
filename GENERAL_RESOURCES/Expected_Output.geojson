@@ -196,7 +196,7 @@ SYMS_TEST-B\Multi-Filter_01_02_03\Multi-Filter_01_02_03_Symbols.geojson
   ]
 }
 
-SYMS_TEST-B\Filter_01\Filter_01_Symbols.geojson
+SYMS_TEST-B\Filter_01\Filter_01_Text.geojson
 {
   "type": "FeatureCollection",
   "features": [
