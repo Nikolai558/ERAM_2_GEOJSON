@@ -302,6 +302,7 @@ To determine what filter directory to place the .geojson in, the program will ne
 - For Text (GeoMapSymbol with GeoMapText)
   - First look for the FilterGroup in `GeoMapObjectType`  > `GeoMapSymbol`  > `GeoMapText`  > `GeoTextFilters`, if not found, look in `GeoMapObjectType`  > `TextDefaultProperties`  > `GeoTextFilters`.
     - It is important to look in this order because the data in `GeoMapObjectType`  > `GeoMapSymbol`  > `GeoMapText`  > `GeoTextFilters` overrides `GeoMapObjectType`  > `TextDefaultProperties`  > `GeoTextFilters`.
+ - The xmlparser will use this logic to determine what filters is to be assigned to the object and will write the filtergroups to AppliedLineFilters, AppliedSymbolFilters, or AppliedTextFilters respectfully.
 
 ## COORDINATES
 
