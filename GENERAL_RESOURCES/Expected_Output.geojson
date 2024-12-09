@@ -39,7 +39,7 @@ LINES_TEST-A\Filter_01\Filter_01_Lines.geojson
       },
       "properties": {
         "E2G_MapObjectType": "ApproachControl",
-        "E2G_MapGroupId": "2",
+        "E2G_MapGroupId": "1",
         "E2G_LineObjectId": "AAA"
       }
     },
@@ -106,8 +106,25 @@ LINES_TEST-A\Filter_13\Filter_13_Lines.geojson
             25.27783611111111
           ],
           [
-            -93.29950833333333,
+            -93.29950833333334,
             40.27753888888889
+          ]
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "ApproachControl",
+        "E2G_MapGroupId": "3",
+        "E2G_LineObjectId": "AAA"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -73.29950833333334,
+            20.277538888888888
           ],
           [
             -91.16875555555556,
@@ -162,13 +179,28 @@ SYMS_TEST-B\Filter_01\Filter_01_Symbols.geojson
         "type": "Point",
         "coordinates": [
           -74.57631388888889,
-          39.455875
+          39.455875000000006
         ]
       },
       "properties": {
         "E2G_MapObjectType": "VOR",
         "E2G_MapGroupId": "23",
         "E2G_SymbolId": "ACY"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.04580555555556,
+          42.4282
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "VOR",
+        "E2G_MapGroupId": "23",
+        "E2G_SymbolId": "DOBIE"
       }
     }
   ]

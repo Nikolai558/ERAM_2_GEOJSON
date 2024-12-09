@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|c:\\users\\ksand\\source\\repos\\eram_2_geojson\\helpers\\geojsongenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|solutionrelative:helpers\\geojsongenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|c:\\users\\ksand\\source\\repos\\eram_2_geojson\\general_resources\\geomaps_lite-example.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{4C6C0A9C-171A-45C7-9857-74965DF43DF0}|ERAM_2_GEOJSON.csproj|solutionrelative:general_resources\\geomaps_lite-example.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GeoJsonGenerator.cs",
-              "DocumentMoniker": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\HELPERS\\GeoJsonGenerator.cs",
-              "RelativeDocumentMoniker": "HELPERS\\GeoJsonGenerator.cs",
-              "ToolTip": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\HELPERS\\GeoJsonGenerator.cs",
-              "RelativeToolTip": "HELPERS\\GeoJsonGenerator.cs",
-              "ViewState": "AgIAAH8AAAAAAAAAAAAmwKYAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T19:39:48.045Z",
+              "Title": "Geomaps_lite-example.xml",
+              "DocumentMoniker": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\GENERAL_RESOURCES\\Geomaps_lite-example.xml",
+              "RelativeDocumentMoniker": "GENERAL_RESOURCES\\Geomaps_lite-example.xml",
+              "ToolTip": "C:\\Users\\ksand\\source\\repos\\ERAM_2_GEOJSON\\GENERAL_RESOURCES\\Geomaps_lite-example.xml",
+              "RelativeToolTip": "GENERAL_RESOURCES\\Geomaps_lite-example.xml",
+              "ViewState": "AgIAABQBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
+              "WhenOpened": "2024-12-09T15:35:50.227Z",
               "EditorCaption": ""
             }
           ]
