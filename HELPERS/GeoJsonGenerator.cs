@@ -1,9 +1,7 @@
-﻿using ERAM_2_GEOJSON.Helpers;
-using ERAM_2_GEOJSON.Models;
+﻿using ERAM_2_GEOJSON.Models;
+using Newtonsoft.Json;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,155 +12,184 @@ namespace ERAM_2_GEOJSON.Helpers
     {
         public void GenerateGeoJson(List<GeoMapRecord> geoMapRecords, string outputDirectory, bool includeCustomProperties)
         {
-            var featureCollections = new Dictionary<string, FeatureCollection>();
-
             foreach (var record in geoMapRecords)
             {
-                string recordBasePath = Path.Combine(outputDirectory, $"{record.GeomapId}_{record.LabelLine1}-{record.LabelLine2}");
+                string recordDirectory = Path.Combine(outputDirectory, $"{record.GeomapId}_{record.LabelLine1}-{record.LabelLine2}");
+                Directory.CreateDirectory(recordDirectory); // Ensure record directory exists
+
+                var featuresByFilter = new Dictionary<string, FeatureCollection>();
 
                 foreach (var objectType in record.ObjectTypes)
                 {
-                    if (objectType.HasLine)
-                    {
-                        ProcessLines(objectType, recordBasePath, featureCollections, includeCustomProperties);
-                    }
-
-                    if (objectType.HasSymbol)
-                    {
-                        ProcessSymbols(objectType, recordBasePath, featureCollections, includeCustomProperties);
-                    }
-
-                    if (objectType.HasText)
-                    {
-                        ProcessText(objectType, recordBasePath, featureCollections, includeCustomProperties);
-                    }
+                    ProcessLines(objectType, recordDirectory, featuresByFilter, includeCustomProperties);
+                    ProcessSymbols(objectType, recordDirectory, featuresByFilter, includeCustomProperties);
+                    ProcessText(objectType, recordDirectory, featuresByFilter, includeCustomProperties);
                 }
-            }
 
-            WriteGeoJsonToFiles(featureCollections);
+                WriteGeoJsonToFiles(featuresByFilter, recordDirectory);
+            }
         }
 
-        private void ProcessLines(GeoMapObjectType objectType, string recordBasePath, Dictionary<string, FeatureCollection> featureCollections, bool includeCustomProperties)
+        private void ProcessLines(GeoMapObjectType objectType, string recordDirectory, Dictionary<string, FeatureCollection> featuresByFilter, bool includeCustomProperties)
         {
-            var groupedLines = objectType.Lines.GroupBy(line => string.Join("_", line.AppliedLineFilters.Select(f => f.ToString("D2"))));
+            var groupedLines = new Dictionary<string, List<List<IPosition>>>();
+
+            foreach (var line in objectType.Lines)
+            {
+                string filterKey = GetFilterKey(line.AppliedLineFilters);
+                string filterDirectory = Path.Combine(recordDirectory, filterKey);
+                Directory.CreateDirectory(filterDirectory);
+
+                if (!groupedLines.ContainsKey(filterKey))
+                {
+                    groupedLines[filterKey] = new List<List<IPosition>>();
+                }
+
+                var start = new Position(
+                    CoordinateConverter.ConvertDMSToDecimal(line.StartLatitude),
+                    CoordinateConverter.ConvertDMSToDecimal(line.StartLongitude)
+                );
+                var end = new Position(
+                    CoordinateConverter.ConvertDMSToDecimal(line.EndLatitude),
+                    CoordinateConverter.ConvertDMSToDecimal(line.EndLongitude)
+                );
+
+                if (groupedLines[filterKey].Count > 0 &&
+                    groupedLines[filterKey].Last().Last().Equals(start))
+                {
+                    groupedLines[filterKey].Last().Add(end); // Extend the last LineString
+                }
+                else
+                {
+                    groupedLines[filterKey].Add(new List<IPosition> { start, end }); // Create a new LineString
+                }
+            }
 
             foreach (var group in groupedLines)
             {
-                string filterKey = group.Key.Contains("_") ? $"Multi-Filter_{group.Key}" : $"Filter_{group.Key}";
-                string directoryPath = Path.Combine(recordBasePath, filterKey);
-                Directory.CreateDirectory(directoryPath);
-                string filePath = Path.Combine(directoryPath, $"{filterKey}_Lines.geojson");
+                string filterKey = group.Key;
 
-                if (!featureCollections.ContainsKey(filePath))
+                if (!featuresByFilter.ContainsKey(filterKey))
                 {
-                    featureCollections[filePath] = new FeatureCollection();
+                    featuresByFilter[filterKey] = new FeatureCollection();
                 }
 
-                foreach (var line in group)
-                {
-                    var lineCoordinates = new List<IPosition>
+                var multiLineString = new MultiLineString(group.Value.Select(line => new LineString(line)));
+
+                var properties = includeCustomProperties
+                    ? new Dictionary<string, object>
                     {
-                        new Position(CoordinateConverter.ConvertDMSToDecimal(line.StartLatitude), CoordinateConverter.ConvertDMSToDecimal(line.StartLongitude)),
-                        new Position(CoordinateConverter.ConvertDMSToDecimal(line.EndLatitude), CoordinateConverter.ConvertDMSToDecimal(line.EndLongitude))
-                    };
+                        { "E2G_MapObjectType", objectType.MapObjectType },
+                        { "E2G_MapGroupId", objectType.MapGroupId },
+                        { "E2G_LineObjectId", objectType.Lines.FirstOrDefault()?.LineObjectId }
+                    }
+                    : null;
 
-                    var lineString = new LineString(lineCoordinates);
-                    var properties = includeCustomProperties
-                        ? new Dictionary<string, object>
-                        {
-                            { "E2G_MapObjectType", objectType.MapObjectType },
-                            { "E2G_MapGroupId", objectType.MapGroupId },
-                            { "E2G_LineObjectId", line.LineObjectId }
-                        }
-                        : null;
-
-                    featureCollections[filePath].Features.Add(new Feature(lineString, properties));
-                }
+                featuresByFilter[filterKey].Features.Add(new Feature(multiLineString, properties));
             }
         }
 
-        private void ProcessSymbols(GeoMapObjectType objectType, string recordBasePath, Dictionary<string, FeatureCollection> featureCollections, bool includeCustomProperties)
+        private void ProcessSymbols(GeoMapObjectType objectType, string recordDirectory, Dictionary<string, FeatureCollection> featuresByFilter, bool includeCustomProperties)
         {
-            var groupedSymbols = objectType.Symbols.GroupBy(symbol => string.Join("_", symbol.AppliedSymbolFilters.Select(f => f.ToString("D2"))));
-
-            foreach (var group in groupedSymbols)
+            foreach (var symbol in objectType.Symbols)
             {
-                string filterKey = group.Key.Contains("_") ? $"Multi-Filter_{group.Key}" : $"Filter_{group.Key}";
-                string directoryPath = Path.Combine(recordBasePath, filterKey);
-                Directory.CreateDirectory(directoryPath);
-                string filePath = Path.Combine(directoryPath, $"{filterKey}_Symbols.geojson");
+                string filterKey = GetFilterKey(symbol.AppliedSymbolFilters);
+                string filterDirectory = Path.Combine(recordDirectory, filterKey);
+                Directory.CreateDirectory(filterDirectory);
 
-                if (!featureCollections.ContainsKey(filePath))
+                if (!featuresByFilter.ContainsKey(filterKey))
                 {
-                    featureCollections[filePath] = new FeatureCollection();
+                    featuresByFilter[filterKey] = new FeatureCollection();
                 }
 
-                foreach (var symbol in group)
-                {
-                    var position = new Position(CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude), CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude));
-                    var point = new Point(position);
-                    var properties = includeCustomProperties
-                        ? new Dictionary<string, object>
-                        {
-                            { "E2G_MapObjectType", objectType.MapObjectType },
-                            { "E2G_MapGroupId", objectType.MapGroupId },
-                            { "E2G_SymbolId", symbol.SymbolId }
-                        }
-                        : null;
+                var position = new Position(
+                    CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
+                    CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude)
+                );
 
-                    featureCollections[filePath].Features.Add(new Feature(point, properties));
-                }
+                var point = new Point(position);
+                var properties = includeCustomProperties
+                    ? new Dictionary<string, object>
+                    {
+                        { "E2G_MapObjectType", objectType.MapObjectType },
+                        { "E2G_MapGroupId", objectType.MapGroupId },
+                        { "E2G_SymbolId", symbol.SymbolId }
+                    }
+                    : null;
+
+                featuresByFilter[filterKey].Features.Add(new Feature(point, properties));
             }
         }
 
-        private void ProcessText(GeoMapObjectType objectType, string recordBasePath, Dictionary<string, FeatureCollection> featureCollections, bool includeCustomProperties)
+        private void ProcessText(GeoMapObjectType objectType, string recordDirectory, Dictionary<string, FeatureCollection> featuresByFilter, bool includeCustomProperties)
         {
             foreach (var symbol in objectType.Symbols)
             {
                 foreach (var textObject in symbol.TextObjects)
                 {
-                    string filterKey = string.Join("_", textObject.AppliedTextFilters.Select(f => f.ToString("D2")));
-                    filterKey = filterKey.Contains("_") ? $"Multi-Filter_{filterKey}" : $"Filter_{filterKey}";
-                    string directoryPath = Path.Combine(recordBasePath, filterKey);
-                    Directory.CreateDirectory(directoryPath);
-                    string filePath = Path.Combine(directoryPath, $"{filterKey}_Text.geojson");
+                    string filterKey = GetFilterKey(textObject.AppliedTextFilters);
+                    string filterDirectory = Path.Combine(recordDirectory, filterKey);
+                    Directory.CreateDirectory(filterDirectory);
 
-                    if (!featureCollections.ContainsKey(filePath))
+                    if (!featuresByFilter.ContainsKey(filterKey))
                     {
-                        featureCollections[filePath] = new FeatureCollection();
+                        featuresByFilter[filterKey] = new FeatureCollection();
                     }
 
-                    var position = new Position(CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude), CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude));
-                    var point = new Point(position);
+                    var position = new Position(
+                        CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
+                        CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude)
+                    );
 
+                    var point = new Point(position);
                     var properties = new Dictionary<string, object>
                     {
-                        { "E2G_MapObjectType", objectType.MapObjectType },
-                        { "E2G_MapGroupId", objectType.MapGroupId },
-                        { "E2G_SymbolId", symbol.SymbolId },
                         { "text", textObject.TextLines }
                     };
 
-                    featureCollections[filePath].Features.Add(new Feature(point, properties));
+                    if (includeCustomProperties)
+                    {
+                        properties.Add("E2G_MapObjectType", objectType.MapObjectType);
+                        properties.Add("E2G_MapGroupId", objectType.MapGroupId);
+                        properties.Add("E2G_SymbolId", symbol.SymbolId);
+                    }
+
+                    featuresByFilter[filterKey].Features.Add(new Feature(point, properties));
                 }
             }
         }
 
-        private void WriteGeoJsonToFiles(Dictionary<string, FeatureCollection> featureCollections)
+        private void WriteGeoJsonToFiles(Dictionary<string, FeatureCollection> featuresByFilter, string baseDirectory)
         {
-            foreach (var kvp in featureCollections)
+            foreach (var filterKey in featuresByFilter.Keys)
             {
+                // Construct the full output path relative to the base directory
+                string filterDirectory = Path.Combine(baseDirectory, filterKey);
+                Directory.CreateDirectory(filterDirectory); // Ensure the directory exists
+
+                string outputFilePath = Path.Combine(filterDirectory, $"{Path.GetFileName(filterKey)}.geojson");
+
                 try
                 {
-                    string geoJsonContent = JsonConvert.SerializeObject(kvp.Value, Formatting.Indented);
-                    File.WriteAllText(kvp.Key, geoJsonContent);
-                    Console.WriteLine($"GeoJSON written to: {kvp.Key}");
+                    string geoJsonContent = JsonConvert.SerializeObject(featuresByFilter[filterKey], Formatting.Indented);
+                    File.WriteAllText(outputFilePath, geoJsonContent);
+                    Console.WriteLine($"GeoJSON written to: {outputFilePath}");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"An error occurred while writing GeoJSON to file: {ex.Message}");
                 }
             }
+        }
+
+        private string GetFilterKey(List<int> filters)
+        {
+            if (filters.Count == 1)
+            {
+                return $"Filter_{filters[0]:D2}";
+            }
+
+            return $"Multi-Filter_{string.Join("_", filters.OrderBy(f => f).Select(f => f.ToString("D2")))}";
         }
     }
 }
