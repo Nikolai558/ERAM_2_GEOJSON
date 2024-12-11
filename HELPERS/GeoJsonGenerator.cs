@@ -168,7 +168,7 @@ namespace ERAM_2_GEOJSON.Helpers
             {
                 // Construct the full output path relative to the base directory
                 string filterDirectory = Path.Combine(baseDirectory, filterKey);
-                filterDirectory = filterDirectory.Replace("_Text", "").Replace("_Symbols", "");
+                filterDirectory = filterDirectory.Replace("_Text", "").Replace("_Symbols", "").Replace("_Lines", "");
                 Directory.CreateDirectory(filterDirectory); // Ensure the directory exists
 
                 string outputFilePath = Path.Combine(filterDirectory, $"{Path.GetFileName(filterKey)}.geojson");
