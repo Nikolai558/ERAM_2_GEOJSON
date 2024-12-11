@@ -37,7 +37,8 @@ namespace ERAM_2_GEOJSON.Helpers
             foreach (var line in objectType.Lines)
             {
                 string filterKey = GetFilterKey(line.AppliedLineFilters);
-                string filterDirectory = Path.Combine(recordDirectory, filterKey);
+                filterKey += "_Lines";
+                string filterDirectory = Path.Combine(recordDirectory, filterKey.Replace("_Lines", ""));
                 Directory.CreateDirectory(filterDirectory);
 
                 if (!groupedLines.ContainsKey(filterKey))
@@ -94,7 +95,8 @@ namespace ERAM_2_GEOJSON.Helpers
             foreach (var symbol in objectType.Symbols)
             {
                 string filterKey = GetFilterKey(symbol.AppliedSymbolFilters);
-                string filterDirectory = Path.Combine(recordDirectory, filterKey);
+                filterKey += "_Symbols";
+                string filterDirectory = Path.Combine(recordDirectory, filterKey.Replace("_Symbols", ""));
                 Directory.CreateDirectory(filterDirectory);
 
                 if (!featuresByFilter.ContainsKey(filterKey))
@@ -128,7 +130,8 @@ namespace ERAM_2_GEOJSON.Helpers
                 foreach (var textObject in symbol.TextObjects)
                 {
                     string filterKey = GetFilterKey(textObject.AppliedTextFilters);
-                    string filterDirectory = Path.Combine(recordDirectory, filterKey);
+                    filterKey += "_Text";
+                    string filterDirectory = Path.Combine(recordDirectory, filterKey.Replace("_Text", ""));
                     Directory.CreateDirectory(filterDirectory);
 
                     if (!featuresByFilter.ContainsKey(filterKey))
@@ -165,6 +168,7 @@ namespace ERAM_2_GEOJSON.Helpers
             {
                 // Construct the full output path relative to the base directory
                 string filterDirectory = Path.Combine(baseDirectory, filterKey);
+                filterDirectory = filterDirectory.Replace("_Text", "").Replace("_Symbols", "");
                 Directory.CreateDirectory(filterDirectory); // Ensure the directory exists
 
                 string outputFilePath = Path.Combine(filterDirectory, $"{Path.GetFileName(filterKey)}.geojson");
