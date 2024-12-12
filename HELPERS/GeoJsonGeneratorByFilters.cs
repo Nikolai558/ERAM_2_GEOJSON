@@ -9,7 +9,7 @@ using ERAM_2_GEOJSON.MODELS;
 
 namespace ERAM_2_GEOJSON.Helpers
 {
-    public class GeoJsonGenerator
+    public class GeoJsonGeneratorByFilters
     {
         public void GenerateGeoJson(List<GeoMapRecord> geoMapRecords, string outputDirectory, bool includeCustomProperties)
         {

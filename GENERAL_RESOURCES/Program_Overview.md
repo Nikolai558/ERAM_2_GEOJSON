@@ -1,5 +1,8 @@
 # PROGRAM OVERVIEW
 
+# PHASE 1 "By Filter"
+---
+
 ## INTENT
 
 Create a .cs terminal program that will take data from a RW ERAM GeoMaps.xml and create geojson files in accordance with RFC-7946 format standards for use by the program CRC.
@@ -419,3 +422,86 @@ Example
 ```json
 {"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-108.79043292472375,40.8506145555433],[-102.2181888812155,37.06641395317544],[-108.9552885445442,40.80903657260835]],[[-108.3837890625,40.46711432758179],[-105.2,37.1]]]},"properties":{"E2G_MapObjectType":"ApproachControl","E2G_MapGroupId":"1","E2G_LineObjectId":"BUF"}},{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-109.1,41.8],[-103.1,38.1],[-109.2,41.9]],[[-107.2,41.3],[-108.2,42.3]]]},"properties":{"E2G_MapObjectType":"ApproachControl","E2G_MapGroupId":"2","E2G_LineObjectId":"BUF"}},{"type":"Feature","geometry":{"type":"MultiLineString","coordinates":[[[-111.1,42.8],[-108.1,39.1],[-110.2,42.9]],[[-105.2,40.70000000000001],[-105.3,40.8]]]},"properties":{"E2G_MapObjectType":"ApproachControl","E2G_MapGroupId":"1","E2G_LineObjectId":"DTW"}}]}
 ```
+
+# PHASE 2 "By Attribute"
+---
+
+## INTENT
+Once the program is able to parse and export geojsons by filters>lines/symbols/text correctly, a secondary option will be created for the users to be able to output by "Attributes".
+
+## GEOJSONGENERATOR & MODELS
+The old GeoJsonGenerator is now renamed to GeoJsonGeneratorByFilters. A new geojsongenerator will be created (GeoJsonGeneratorByAttributes) for this new feature.
+
+The GeomapXmlParser and models will need to be modified to take into consideration the following xml elements:
+ - Lines
+   - int BCGGroup
+   - int Thickness
+ - Symbols
+   - int BCGGroup
+   - int FontSize
+ - Text
+   - int BCGGroup
+   - int FontSize
+   - bool Underline
+   - bool DisplaySetting (if false, skip this element)
+   - int XPixelOffset
+   - int YPixelOffset
+
+These elements may be found in either the Default Properties (DefaultLineProperties/DefaultSymbolProperties/TextDefaultProperties) in the GeoMapObjectType or the element itself as an overriding attribute just like the OverridingLineFilterGroups/OverridingSymbolFiltersGroups/OverridingTextFilterGroups.
+
+Handling of the default vs overriding attributes will be handled in the same way as before and will need the following logic for each line/symbol/text object:
+   - AppliedLineBcgGroup
+   - AppliedLineThickness
+   - AppliedSymbolBcgGroup
+   - AppliedSymbolFontSize
+   - AppliedTextBcgGroup (taken from the AppliedSymbolBcgGroup and assigned to the AppliedTextBcgGroup)
+   - AppliedTextUnderline
+   - AppliedTextFontSize
+   - AppliedTextDisplaySetting
+   - AppliedTextXPixelOffset
+   - AppliedTextYPixelOffset
+
+## DIRECTORY NAMING
+
+This By Attributes option will created directories the same way as the By Filters option: ERAM_2_GEOJSON_OUTPUT\`GeomapId`_`LabelLine1`-`LabelLine2`
+Except now there will be no sub directories within the GeomapId folder.
+
+## FILE NAMES
+
+Files will now be named like so with the data from the XML, separate data sepearated by an underscore:
+ - If Lines file:
+   - `MapObjectType`
+   - MapGroupId `MapGroupId`
+   - `LineObjectId`
+   - Filters `filters in order sequential separated by space and double digits like before. No need for "multi-Filter" prefix`
+   - BCG `BCGGroup`
+   - `LineStyle`
+   - Thickness `Thickness`
+   - Lines.geojson
+ - If Symbol file:
+   - `MapObjectType`
+   - MapGroupId `MapGroupId`
+   - Filters `filters in order sequential separated by space and double digits like before. No need for "multi-Filter" prefix`
+   - BCG `BCGGroup`
+   - `SymbolStyle`
+   - FontSize `FontSize`
+   - Symbols.geojson
+ - If Text file:
+   - `MapObjectType`
+   - MapGroupId `MapGroupId`
+   - Filters `filters in order sequential separated by space and double digits like before. No need for "multi-Filter" prefix`
+   - BCG `BCGGroup` (AppliedTextBcgGroup)
+   - FontSize `FontSize`
+   - Underline `T or F for true/false`
+   - XPixelOffset `XPixelOffset`
+   - YPixelOffset `YPixelOffset`
+   - Text.geojson
+
+Examples:
+ - ERAM_2_GEOJSON_OUTPUT\
+   - CENTER_CENTER-MAP\
+     - ApproachControl_MapGroupId 1_BUF_Filters 01 03 11_BCG 3_ShortDashed_Thickness 3_Lines.geojson
+	 - SECTOR_MapGroupId 3_Filters 20_BCG 19_DME_FontSize 2_Symbols.geojson
+	 - WAYPOINT_MapGroupId 30_Filters 04 05_BCG 15_FontSize 1_Underline T_XPixelOffset 0_YPixelOffset -12_Text.geojson
+
+File names will need to go through the SanitizeForFileName method prior to creation.

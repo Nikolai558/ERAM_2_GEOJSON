@@ -21,12 +21,12 @@ namespace ERAM_2_GEOJSON
             {
                 args = new string[]
                 {
-                    @"C:\Users\ksand\source\repos\ERAM_2_GEOJSON\GENERAL_RESOURCES\",
+                    @"C:\Users\ksand\OneDrive\Desktop\ProjFolder\",
                     @"C:\Users\ksand\downloads\",
                     "true"
                 };
 
-                geomapXmlFileName = "Geomaps_lite-example.xml";
+                // geomapXmlFileName = "Geomaps_lite-example.xml";
                 // TODO: Write code that will parse this file and then un-comment out this line.
                 //consoleCommandControlFileName = "ConsoleCommandControl.xml";
             }
@@ -77,7 +77,7 @@ namespace ERAM_2_GEOJSON
                 DirectoryHandler.CreateOutputDirectory(outputDirectory);
 
                 // Generate GeoJSON
-                GeoJsonGenerator generator = new GeoJsonGenerator();
+                GeoJsonGeneratorByFilters generator = new GeoJsonGeneratorByFilters();
                 generator.GenerateGeoJson(geoMapRecords, outputDirectory, includeCustomProperties);
 
                 Console.WriteLine("GeoJSON generation complete.");
