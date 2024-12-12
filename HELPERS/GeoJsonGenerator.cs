@@ -5,6 +5,7 @@ using GeoJSON.Net.Geometry;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ERAM_2_GEOJSON.MODELS;
 
 namespace ERAM_2_GEOJSON.Helpers
 {
@@ -15,7 +16,7 @@ namespace ERAM_2_GEOJSON.Helpers
             foreach (var record in geoMapRecords)
             {
                 string recordDirectory = Path.Combine(outputDirectory, $"{record.GeomapId}_{record.LabelLine1}-{record.LabelLine2}");
-                Directory.CreateDirectory(recordDirectory); // Ensure record directory exists
+                EnsureDirectoryExists(outputDirectory, recordDirectory);
 
                 var featuresByFilter = new Dictionary<string, FeatureCollection>();
 
@@ -36,10 +37,8 @@ namespace ERAM_2_GEOJSON.Helpers
 
             foreach (var line in objectType.Lines)
             {
-                string filterKey = GetFilterKey(line.AppliedLineFilters);
-                filterKey += "_Lines";
-                string filterDirectory = Path.Combine(recordDirectory, filterKey.Replace("_Lines", ""));
-                Directory.CreateDirectory(filterDirectory);
+                string filterKey = ConstructFilterKey(line.AppliedLineFilters, "_Lines");
+                string filterDirectory = EnsureDirectoryExists(recordDirectory, filterKey);
 
                 if (!groupedLines.ContainsKey(filterKey))
                 {
@@ -66,6 +65,53 @@ namespace ERAM_2_GEOJSON.Helpers
                 }
             }
 
+            AddGroupedLinesToFeatures(groupedLines, featuresByFilter, objectType, includeCustomProperties);
+        }
+
+        private void ProcessSymbols(GeoMapObjectType objectType, string recordDirectory, Dictionary<string, FeatureCollection> featuresByFilter, bool includeCustomProperties)
+        {
+            foreach (var symbol in objectType.Symbols)
+            {
+                string filterKey = ConstructFilterKey(symbol.AppliedSymbolFilters, "_Symbols");
+                string filterDirectory = EnsureDirectoryExists(recordDirectory, filterKey);
+
+                AddPointToFeatures(featuresByFilter, filterKey, symbol, includeCustomProperties, objectType);
+            }
+        }
+
+        private void ProcessText(GeoMapObjectType objectType, string recordDirectory, Dictionary<string, FeatureCollection> featuresByFilter, bool includeCustomProperties)
+        {
+            foreach (var symbol in objectType.Symbols)
+            {
+                foreach (var textObject in symbol.TextObjects)
+                {
+                    string filterKey = ConstructFilterKey(textObject.AppliedTextFilters, "_Text");
+                    string filterDirectory = EnsureDirectoryExists(recordDirectory, filterKey);
+
+                    AddTextPointToFeatures(featuresByFilter, filterKey, textObject, symbol, includeCustomProperties, objectType);
+                }
+            }
+        }
+
+        private string ConstructFilterKey(List<int> filters, string suffix)
+        {
+            string baseKey = filters.Count == 1
+                ? $"Filter_{filters[0]:D2}"
+                : $"Multi-Filter_{string.Join("_", filters.OrderBy(f => f).Select(f => f.ToString("D2")))}";
+
+            return baseKey + suffix;
+        }
+
+        private string EnsureDirectoryExists(string baseDirectory, string filterKey)
+        {
+            string cleanedKey = filterKey.Replace("_Symbols", "").Replace("_Text", "").Replace("_Lines", "");
+            string directoryPath = Path.Combine(baseDirectory, cleanedKey);
+            Directory.CreateDirectory(directoryPath);
+            return directoryPath;
+        }
+
+        private void AddGroupedLinesToFeatures(Dictionary<string, List<List<IPosition>>> groupedLines, Dictionary<string, FeatureCollection> featuresByFilter, GeoMapObjectType objectType, bool includeCustomProperties)
+        {
             foreach (var group in groupedLines)
             {
                 string filterKey = group.Key;
@@ -90,76 +136,52 @@ namespace ERAM_2_GEOJSON.Helpers
             }
         }
 
-        private void ProcessSymbols(GeoMapObjectType objectType, string recordDirectory, Dictionary<string, FeatureCollection> featuresByFilter, bool includeCustomProperties)
+        private void AddPointToFeatures(Dictionary<string, FeatureCollection> featuresByFilter, string filterKey, GeoMapSymbol symbol, bool includeCustomProperties, GeoMapObjectType objectType)
         {
-            foreach (var symbol in objectType.Symbols)
+            if (!featuresByFilter.ContainsKey(filterKey))
             {
-                string filterKey = GetFilterKey(symbol.AppliedSymbolFilters);
-                filterKey += "_Symbols";
-                string filterDirectory = Path.Combine(recordDirectory, filterKey.Replace("_Symbols", ""));
-                Directory.CreateDirectory(filterDirectory);
-
-                if (!featuresByFilter.ContainsKey(filterKey))
-                {
-                    featuresByFilter[filterKey] = new FeatureCollection();
-                }
-
-                var position = new Position(
-                    CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
-                    CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude)
-                );
-
-                var point = new Point(position);
-                var properties = includeCustomProperties
-                    ? new Dictionary<string, object>
-                    {
-                        { "E2G_MapObjectType", objectType.MapObjectType },
-                        { "E2G_MapGroupId", objectType.MapGroupId },
-                        { "E2G_SymbolId", symbol.SymbolId }
-                    }
-                    : null;
-
-                featuresByFilter[filterKey].Features.Add(new Feature(point, properties));
+                featuresByFilter[filterKey] = new FeatureCollection();
             }
+
+            var position = new Position(
+                CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
+                CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude)
+            );
+
+            var properties = includeCustomProperties
+                ? new Dictionary<string, object>
+                {
+                    { "E2G_MapObjectType", objectType.MapObjectType },
+                    { "E2G_MapGroupId", objectType.MapGroupId },
+                    { "E2G_SymbolId", symbol.SymbolId }
+                }
+                : null;
+
+            featuresByFilter[filterKey].Features.Add(new Feature(new Point(position), properties));
         }
 
-        private void ProcessText(GeoMapObjectType objectType, string recordDirectory, Dictionary<string, FeatureCollection> featuresByFilter, bool includeCustomProperties)
+        private void AddTextPointToFeatures(Dictionary<string, FeatureCollection> featuresByFilter, string filterKey, GeoMapText textObject, GeoMapSymbol symbol, bool includeCustomProperties, GeoMapObjectType objectType)
         {
-            foreach (var symbol in objectType.Symbols)
+            if (!featuresByFilter.ContainsKey(filterKey))
             {
-                foreach (var textObject in symbol.TextObjects)
-                {
-                    string filterKey = GetFilterKey(textObject.AppliedTextFilters);
-                    filterKey += "_Text";
-                    string filterDirectory = Path.Combine(recordDirectory, filterKey.Replace("_Text", ""));
-                    Directory.CreateDirectory(filterDirectory);
-
-                    if (!featuresByFilter.ContainsKey(filterKey))
-                    {
-                        featuresByFilter[filterKey] = new FeatureCollection();
-                    }
-
-                    var position = new Position(
-                        CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
-                        CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude)
-                    );
-
-                    var point = new Point(position);
-                    var properties = new Dictionary<string, object>
-                    {
-                        { "text", textObject.TextLines }
-                    };
-
-                    if (includeCustomProperties)
-                    {
-                        properties.Add("E2G_MapObjectType", objectType.MapObjectType);
-                        properties.Add("E2G_MapGroupId", objectType.MapGroupId);
-                        properties.Add("E2G_SymbolId", symbol.SymbolId);
-                    }
-
-                    featuresByFilter[filterKey].Features.Add(new Feature(point, properties));
-                }
+                featuresByFilter[filterKey] = new FeatureCollection();
             }
+
+            var position = new Position(
+                CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
+                CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude)
+            );
+
+            var properties = new Dictionary<string, object> { { "text", textObject.TextLines } };
+
+            if (includeCustomProperties)
+            {
+                properties.Add("E2G_MapObjectType", objectType.MapObjectType);
+                properties.Add("E2G_MapGroupId", objectType.MapGroupId);
+                properties.Add("E2G_SymbolId", symbol.SymbolId);
+            }
+
+            featuresByFilter[filterKey].Features.Add(new Feature(new Point(position), properties));
         }
 
         private void WriteGeoJsonToFiles(Dictionary<string, FeatureCollection> featuresByFilter, string baseDirectory)
@@ -184,16 +206,6 @@ namespace ERAM_2_GEOJSON.Helpers
                     Console.WriteLine($"An error occurred while writing GeoJSON to file: {ex.Message}");
                 }
             }
-        }
-
-        private string GetFilterKey(List<int> filters)
-        {
-            if (filters.Count == 1)
-            {
-                return $"Filter_{filters[0]:D2}";
-            }
-
-            return $"Multi-Filter_{string.Join("_", filters.OrderBy(f => f).Select(f => f.ToString("D2")))}";
         }
     }
 }
