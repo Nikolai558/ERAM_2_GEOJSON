@@ -90,36 +90,27 @@ LINES_TEST-A\Filter_13\Filter_13_Lines.geojson
     {
       "type": "Feature",
       "geometry": {
-        "type": "LineString",
+        "type": "MultiLineString",
         "coordinates": [
           [
-            -71.69189722222222,
-            25.27783611111111
+            [
+              -71.69189722222222,
+              25.27783611111111
+            ],
+            [
+              -93.29950833333334,
+              40.27753888888889
+            ]
           ],
           [
-            -93.29950833333334,
-            40.27753888888889
-          ]
-        ]
-      },
-      "properties": {
-        "E2G_MapObjectType": "ApproachControl",
-        "E2G_MapGroupId": "3",
-        "E2G_LineObjectId": "AAA"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            -73.29950833333334,
-            20.277538888888888
-          ],
-          [
-            -91.16875555555556,
-            37.57871111111111
+            [
+              -73.29950833333334,
+              20.277538888888888
+            ],
+            [
+              -91.16875555555556,
+              37.57871111111111
+            ]
           ]
         ]
       },
