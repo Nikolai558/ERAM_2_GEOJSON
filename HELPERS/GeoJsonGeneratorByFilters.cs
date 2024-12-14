@@ -171,7 +171,16 @@ namespace ERAM_2_GEOJSON.Helpers
                 CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude)
             );
 
-            var properties = new Dictionary<string, object> { { "text", textObject.TextLines } };
+            // Create properties based on AppliedTextDisplaySetting
+            var properties = new Dictionary<string, object>();
+            if (textObject.AppliedTextDisplaySetting == true)
+            {
+                properties.Add("text", textObject.TextLines);
+            }
+            else
+            {
+                properties.Add("E2G_text", textObject.TextLines);
+            }
 
             if (includeCustomProperties)
             {

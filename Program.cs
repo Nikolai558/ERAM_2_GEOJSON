@@ -25,7 +25,7 @@ namespace ERAM_2_GEOJSON
                 {
                     @"C:\Users\ksand\source\repos\ERAM_2_GEOJSON\GENERAL_RESOURCES\",
                     @"C:\Users\ksand\downloads\",
-                    "raw",
+                    "filters",
                     "true"
                 };
 

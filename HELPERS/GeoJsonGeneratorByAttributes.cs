@@ -112,13 +112,24 @@ namespace ERAM_2_GEOJSON.Helpers
         private void ProcessText(List<GeoMapObjectType> objectTypes, string recordDirectory, bool includeCustomProperties)
         {
             var groupedText = new Dictionary<string, List<Feature>>();
+            var groupedSymbols = new Dictionary<string, List<Feature>>(); // Handle symbols separately
 
             foreach (var objectType in objectTypes)
             {
                 foreach (var symbol in objectType.Symbols)
                 {
+                    bool hasProcessedText = false; // Track if text objects were processed
+
                     foreach (var textObject in symbol.TextObjects)
                     {
+                        // Skip processing if AppliedTextDisplaySetting == false
+                        if (textObject.AppliedTextDisplaySetting == false)
+                        {
+                            continue;
+                        }
+
+                        hasProcessedText = true; // Mark that at least one text object was processed
+
                         string fileKey = ConstructTextFileKey(objectType, symbol, textObject);
 
                         if (!groupedText.ContainsKey(fileKey))
@@ -135,10 +146,38 @@ namespace ERAM_2_GEOJSON.Helpers
 
                         groupedText[fileKey].Add(new Feature(new Point(position), properties));
                     }
+
+                    // If no valid text objects were processed, treat as a symbol
+                    if (!hasProcessedText)
+                    {
+                        string symbolFileKey = ConstructSymbolFileKey(objectType, symbol);
+
+                        if (!groupedSymbols.ContainsKey(symbolFileKey))
+                        {
+                            groupedSymbols[symbolFileKey] = new List<Feature>();
+                        }
+
+                        var position = new Position(
+                            CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
+                            CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude)
+                        );
+
+                        var symbolProperties = CreateSymbolProperties(objectType, symbol);
+                        groupedSymbols[symbolFileKey].Add(new Feature(new Point(position), symbolProperties));
+                    }
                 }
             }
 
+            // Write text files
             foreach (var group in groupedText)
+            {
+                string filePath = Path.Combine(recordDirectory, SanitizeFileName(group.Key));
+                var featureCollection = new FeatureCollection(group.Value);
+                WriteGeoJsonToFile(filePath, featureCollection);
+            }
+
+            // Write symbol files for skipped text objects
+            foreach (var group in groupedSymbols)
             {
                 string filePath = Path.Combine(recordDirectory, SanitizeFileName(group.Key));
                 var featureCollection = new FeatureCollection(group.Value);

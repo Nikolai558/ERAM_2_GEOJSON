@@ -96,18 +96,8 @@ namespace ERAM_2_GEOJSON.Helpers
         {
             foreach (var symbol in objectType.Symbols)
             {
-                bool hasValidText = false;
-
                 foreach (var textObject in symbol.TextObjects)
                 {
-                    // Skip text object if AppliedTextDisplaySetting is false
-                    if (!textObject.AppliedTextDisplaySetting == false)
-                    {
-                        continue;
-                    }
-
-                    hasValidText = true;
-
                     var position = new Position(
                         CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
                         CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude));
@@ -119,10 +109,20 @@ namespace ERAM_2_GEOJSON.Helpers
                         { "size", textObject.AppliedTextFontSize },
                         { "underline", textObject.AppliedTextUnderline ?? false },
                         { "xOffset", textObject.AppliedTextXPixelOffset },
-                        { "yOffset", textObject.AppliedTextYPixelOffset },
-                        { "text", textObject.TextLines }
+                        { "yOffset", textObject.AppliedTextYPixelOffset }
                     };
 
+                    // Add "text" or "E2G_text" based on AppliedTextDisplaySetting
+                    if (textObject.AppliedTextDisplaySetting == true)
+                    {
+                        properties.Add("text", textObject.TextLines);
+                    }
+                    else
+                    {
+                        properties.Add("E2G_text", textObject.TextLines);
+                    }
+
+                    // Include custom properties if required
                     if (includeCustomProperties)
                     {
                         properties.Add("E2G_MapObjectType", objectType.MapObjectType);
@@ -133,38 +133,7 @@ namespace ERAM_2_GEOJSON.Helpers
                     var point = new Point(position);
                     featureCollection.Features.Add(new Feature(point, properties));
                 }
-
-                // If no valid text objects are found, process symbol as a standalone symbol
-                if (!hasValidText)
-                {
-                    ProcessSymbolAsStandalone(symbol, objectType, featureCollection, includeCustomProperties);
-                }
             }
-        }
-
-        private void ProcessSymbolAsStandalone(GeoMapSymbol symbol, GeoMapObjectType objectType, FeatureCollection featureCollection, bool includeCustomProperties)
-        {
-            var position = new Position(
-                CoordinateConverter.ConvertDMSToDecimal(symbol.Latitude),
-                CoordinateConverter.ConvertDMSToDecimal(symbol.Longitude));
-
-            var properties = new Dictionary<string, object>
-            {
-                { "bcg", symbol.AppliedSymbolBcgGroup },
-                { "filters", symbol.AppliedSymbolFilters },
-                { "style", symbol.AppliedSymbolStyle },
-                { "size", symbol.AppliedSymbolFontSize }
-            };
-
-            if (includeCustomProperties)
-            {
-                properties.Add("E2G_MapObjectType", objectType.MapObjectType);
-                properties.Add("E2G_MapGroupId", objectType.MapGroupId);
-                properties.Add("E2G_SymbolId", symbol.SymbolId);
-            }
-
-            var point = new Point(position);
-            featureCollection.Features.Add(new Feature(point, properties));
         }
 
         private void WriteGeoJsonToFile(string filePath, FeatureCollection featureCollection)
