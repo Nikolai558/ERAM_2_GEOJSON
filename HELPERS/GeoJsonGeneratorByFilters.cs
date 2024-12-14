@@ -5,7 +5,6 @@ using GeoJSON.Net.Geometry;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ERAM_2_GEOJSON.MODELS;
 
 namespace ERAM_2_GEOJSON.Helpers
 {

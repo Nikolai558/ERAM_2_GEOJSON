@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using ERAM_2_GEOJSON.Models;
-using ERAM_2_GEOJSON.MODELS;
 
 namespace ERAM_2_GEOJSON.Parsers
 {
@@ -36,6 +35,17 @@ namespace ERAM_2_GEOJSON.Parsers
                         DefaultLineFilters = ParseFilterGroups(geoMapObjectTypeNode.SelectSingleNode("DefaultLineProperties/GeoLineFilters")),
                         DefaultSymbolFilters = ParseFilterGroups(geoMapObjectTypeNode.SelectSingleNode("DefaultSymbolProperties/GeoSymbolFilters")),
                         DefaultTextFilters = ParseFilterGroups(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/GeoTextFilters")),
+                        DefaultLineStyle = ParseString(geoMapObjectTypeNode.SelectSingleNode("DefaultLineProperties/LineStyle")),
+                        DefaultLineBcgGroup = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("DefaultLineProperties/BCGGroup")),
+                        DefaultLineThickness = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("DefaultLineProperties/Thickness")),
+                        DefaultSymbolBcgGroup = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("DefaultSymbolProperties/BCGGroup")),
+                        DefaultSymbolFontSize = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("DefaultSymbolProperties/FontSize")),
+                        DefaultTextBcgGroup = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/BCGGroup")),
+                        DefaultTextFontSize = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/FontSize")),
+                        DefaultTextUnderline = ParseBoolean(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/Underline")),
+                        DefaultTextDisplaySetting = ParseBoolean(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/DisplaySetting")),
+                        DefaultTextXPixelOffset = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/XPixelOffset")),
+                        DefaultTextYPixelOffset = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/YPixelOffset"))
                     };
 
                     // Parse GeoMapLine objects
@@ -49,14 +59,18 @@ namespace ERAM_2_GEOJSON.Parsers
                             StartLongitude = geoMapLineNode["StartLongitude"]?.InnerText ?? throw new Exception("StartLongitude is required."),
                             EndLatitude = geoMapLineNode["EndLatitude"]?.InnerText ?? throw new Exception("EndLatitude is required."),
                             EndLongitude = geoMapLineNode["EndLongitude"]?.InnerText ?? throw new Exception("EndLongitude is required."),
-                            OverridingLineFilterGroups = ParseFilterGroups(geoMapLineNode.SelectSingleNode("GeoLineFilters"))
+                            OverridingLineFilterGroups = ParseFilterGroups(geoMapLineNode.SelectSingleNode("GeoLineFilters")),
+                            OverridingLineBcgGroup = ParseInteger(geoMapLineNode.SelectSingleNode("BCGGroup")),
+                            OverridingLineThickness = ParseInteger(geoMapLineNode.SelectSingleNode("Thickness"))
                         };
 
-                        // If the GeoMapLine object has overriding Filter Groups, it will assign those values to this set of coordinates,
-                        // otherwise, uses the Default Line Filters from the GeoMapObjectType.
                         geoMapLine.AppliedLineFilters = geoMapLine.OverridingLineFilterGroups.Count > 0
                             ? geoMapLine.OverridingLineFilterGroups
                             : geoMapObjectType.DefaultLineFilters;
+
+                        geoMapLine.AppliedLineStyle = geoMapLine.OverridingLineStyle ?? geoMapObjectType.DefaultLineStyle;
+                        geoMapLine.AppliedLineBcgGroup = geoMapLine.OverridingLineBcgGroup ?? geoMapObjectType.DefaultLineBcgGroup;
+                        geoMapLine.AppliedLineThickness = geoMapLine.OverridingLineThickness ?? geoMapObjectType.DefaultLineThickness;
 
                         geoMapObjectType.Lines.Add(geoMapLine);
                     }
@@ -70,15 +84,24 @@ namespace ERAM_2_GEOJSON.Parsers
                             SymbolId = geoMapSymbolNode["SymbolId"]?.InnerText ?? throw new Exception("SymbolId is required."),
                             Latitude = geoMapSymbolNode["Latitude"]?.InnerText ?? throw new Exception("Latitude is required."),
                             Longitude = geoMapSymbolNode["Longitude"]?.InnerText ?? throw new Exception("Longitude is required."),
-                            OverridingSymbolFiltersGroups = ParseFilterGroups(geoMapSymbolNode.SelectSingleNode("GeoSymbolFilters"))
+                            OverridingSymbolFiltersGroups = ParseFilterGroups(geoMapSymbolNode.SelectSingleNode("GeoSymbolFilters")),
+                            OverridingSymbolBcgGroup = ParseInteger(geoMapSymbolNode.SelectSingleNode("BCGGroup")),
+                            OverridingSymbolFontSize = ParseInteger(geoMapSymbolNode.SelectSingleNode("FontSize")),
+
+                            // Add OverridingSymbolStyle logic
+                            OverridingSymbolStyle = geoMapSymbolNode["SymbolStyle"]?.InnerText
                         };
 
-                        // If the GeoMapSymbol object has overriding Filter Groups, it will assign those values to this set of coordinates,
-                        // otherwise, uses the Default Symbol Filters from the GeoMapObjectType.
+                        // Assign Applied attributes, with fallback to defaults
                         geoMapSymbol.AppliedSymbolFilters = geoMapSymbol.OverridingSymbolFiltersGroups.Count > 0
                             ? geoMapSymbol.OverridingSymbolFiltersGroups
                             : geoMapObjectType.DefaultSymbolFilters;
 
+                        geoMapSymbol.AppliedSymbolBcgGroup = geoMapSymbol.OverridingSymbolBcgGroup ?? geoMapObjectType.DefaultSymbolBcgGroup;
+                        geoMapSymbol.AppliedSymbolFontSize = geoMapSymbol.OverridingSymbolFontSize ?? geoMapObjectType.DefaultSymbolFontSize;
+
+                        // Assign AppliedSymbolStyle with fallback to DefaultSymbolStyle
+                        geoMapSymbol.AppliedSymbolStyle = geoMapSymbol.OverridingSymbolStyle ?? geoMapObjectType.DefaultSymbolStyle;
 
                         // Parse GeoMapText within GeoMapSymbol
                         var geoMapTextNodes = geoMapSymbolNode.SelectNodes("GeoMapText");
@@ -86,16 +109,25 @@ namespace ERAM_2_GEOJSON.Parsers
                         {
                             var geoMapText = new GeoMapText
                             {
-                                OverridingTextFilterGroups = ParseFilterGroups(geoMapTextNode.SelectSingleNode("GeoTextFilters"))
+                                OverridingTextFilterGroups = ParseFilterGroups(geoMapTextNode.SelectSingleNode("GeoTextFilters")),
+                                OverridingTextFontSize = ParseInteger(geoMapTextNode.SelectSingleNode("FontSize")),
+                                OverridingTextUnderline = ParseBoolean(geoMapTextNode.SelectSingleNode("Underline")),
+                                OverridingTextDisplaySetting = ParseBoolean(geoMapTextNode.SelectSingleNode("DisplaySetting")),
+                                OverridingTextXPixelOffset = ParseInteger(geoMapTextNode.SelectSingleNode("XPixelOffset")),
+                                OverridingTextYPixelOffset = ParseInteger(geoMapTextNode.SelectSingleNode("YPixelOffset"))
                             };
 
-                            // If the GeoMapText object has overriding Filter Groups, it will assign those values to this set of coordinates foudn in GeoMapSymbol,
-                            // otherwise, uses the Default Text Filters from the GeoMapObjectType.
                             geoMapText.AppliedTextFilters = geoMapText.OverridingTextFilterGroups.Count > 0
                                 ? geoMapText.OverridingTextFilterGroups
                                 : geoMapObjectType.DefaultTextFilters;
 
-                            // Parse GeoTextStrings inside GeoMapText
+                            geoMapText.AppliedTextBcgGroup = geoMapText.OverridingTextBcgGroup ?? geoMapObjectType.DefaultTextBcgGroup;
+                            geoMapText.AppliedTextFontSize = geoMapText.OverridingTextFontSize ?? geoMapObjectType.DefaultTextFontSize;
+                            geoMapText.AppliedTextUnderline = geoMapText.OverridingTextUnderline ?? geoMapObjectType.DefaultTextUnderline;
+                            geoMapText.AppliedTextDisplaySetting = geoMapText.OverridingTextDisplaySetting ?? geoMapObjectType.DefaultTextDisplaySetting;
+                            geoMapText.AppliedTextXPixelOffset = geoMapText.OverridingTextXPixelOffset ?? geoMapObjectType.DefaultTextXPixelOffset;
+                            geoMapText.AppliedTextYPixelOffset = geoMapText.OverridingTextYPixelOffset ?? geoMapObjectType.DefaultTextYPixelOffset;
+
                             var textLineNodes = geoMapTextNode.SelectNodes("GeoTextStrings/TextLine");
                             foreach (XmlNode textLineNode in textLineNodes)
                             {
@@ -117,7 +149,6 @@ namespace ERAM_2_GEOJSON.Parsers
             return geoMapRecords;
         }
 
-        // Finds the FilterGroup values for the current Line/Symbol/Symbol>Text object
         private static List<int> ParseFilterGroups(XmlNode? filterGroupNode)
         {
             var filterGroups = new List<int>();
@@ -132,6 +163,20 @@ namespace ERAM_2_GEOJSON.Parsers
                 }
             }
             return filterGroups;
+        }
+        private static string? ParseString(XmlNode? node)
+        {
+            return node?.InnerText;
+        }
+
+        private static int? ParseInteger(XmlNode? node)
+        {
+            return node != null && int.TryParse(node.InnerText, out int value) ? value : null;
+        }
+
+        private static bool? ParseBoolean(XmlNode? node)
+        {
+            return node != null && bool.TryParse(node.InnerText, out bool value) ? value : null;
         }
     }
 }

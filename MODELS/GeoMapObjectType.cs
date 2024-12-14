@@ -1,55 +1,47 @@
-﻿using ERAM_2_GEOJSON.Models;
-using ERAM_2_GEOJSON.MODELS;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ERAM_2_GEOJSON.Models
 {
     public class GeoMapObjectType
     {
-        // Required properties
         public required string MapObjectType { get; set; }
         public required string MapGroupId { get; set; }
 
-        // Line data
         public List<GeoMapLine> Lines { get; set; }
         public List<int>? DefaultLineFilters { get; set; }
 
-        // Symbol data
+        public int? DefaultLineBcgGroup { get; set; }
+        public int? DefaultLineThickness { get; set; }
+        public string? DefaultLineStyle { get; set; }
+
         public List<GeoMapSymbol> Symbols { get; set; }
         public List<int>? DefaultSymbolFilters { get; set; }
 
-        // Symbol > Text data
-        public List<int>? DefaultTextFilters { get; set; }
+        public int? DefaultSymbolBcgGroup { get; set; }
+        public int? DefaultSymbolFontSize { get; set; }
+        public string? DefaultSymbolStyle { get; set; }
 
-        // Boolean properties to indicate data presence
+        public List<int>? DefaultTextFilters { get; set; }
+        public int? DefaultTextBcgGroup { get; set; }
+        public int? DefaultTextFontSize { get; set; }
+
+        public bool? DefaultTextUnderline { get; set; }
+        public bool? DefaultTextDisplaySetting { get; set; }
+
+        public int? DefaultTextXPixelOffset { get; set; }
+        public int? DefaultTextYPixelOffset { get; set; }
+
         public bool HasLine => Lines?.Count > 0;
         public bool HasSymbol => Symbols?.Count > 0;
-        public bool HasText
-        {
-            get
-            {
-                if (Symbols.Count > 0)
-                {
-                    foreach (var symbol in Symbols)
-                    {
-                        if (symbol.TextObjects?.Count > 0)
-                        {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-        }
+        public bool HasText => Symbols?.Any(symbol => symbol.TextObjects?.Count > 0) ?? false;
 
-        // Constructor
         public GeoMapObjectType()
         {
             Lines = new List<GeoMapLine>();
+            Symbols = new List<GeoMapSymbol>();
             DefaultLineFilters = new List<int>();
             DefaultSymbolFilters = new List<int>();
             DefaultTextFilters = new List<int>();
-            Symbols = new List<GeoMapSymbol>();
         }
     }
 }

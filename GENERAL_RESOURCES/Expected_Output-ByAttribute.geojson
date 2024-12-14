@@ -1,4 +1,4 @@
-ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 1_AAA_Filters 01_BCG 2_ShortDashed_Thickness 1_Lines.geojson
+ERAM_2_GEOJSON\LINES_TEST-A\Type ApproachControl_Group 1_Object AAA_Filters 01_BCG 2_Style ShortDashed_Thick 1_Lines.geojson
 {
   "type": "FeatureCollection",
   "features": [
@@ -39,14 +39,14 @@ ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 1_AAA_Filters 01_BCG 2_Sh
       },
       "properties": {
         "E2G_MapObjectType": "ApproachControl",
-        "E2G_MapGroupId": "1",
+        "E2G_Group": "1",
         "E2G_LineObjectId": "AAA"
       }
     }
   ]
 }
 
-ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 2_AAA_Filters 01_BCG 2_ShortDashed_Thickness 1_Lines.geojson
+ERAM_2_GEOJSON\LINES_TEST-A\Type ApproachControl_Group 2_Object AAA_Filters 01_BCG 2_Style ShortDashed_Thick 1_Lines.geojson
     {
       "type": "Feature",
       "geometry": {
@@ -80,14 +80,14 @@ ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 2_AAA_Filters 01_BCG 2_Sh
       },
       "properties": {
         "E2G_MapObjectType": "ApproachControl",
-        "E2G_MapGroupId": "2",
+        "E2G_Group": "2",
         "E2G_LineObjectId": "AAA"
       }
     }
   ]
 }
 
-ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 3_AAA_Filters 13_BCG 2_ShortDashed_Thickness 1_Lines.geojson
+ERAM_2_GEOJSON\LINES_TEST-A\Type ApproachControl_Group 3_Object AAA_Filters 13_BCG 2_Style ShortDashed_Thick 1_Lines.geojson
 {
   "type": "FeatureCollection",
   "features": [
@@ -120,14 +120,14 @@ ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 3_AAA_Filters 13_BCG 2_Sh
       },
       "properties": {
         "E2G_MapObjectType": "ApproachControl",
-        "E2G_MapGroupId": "3",
+        "E2G_Group": "3",
         "E2G_LineObjectId": "AAA"
       }
     }
   ]
 }
 
-ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 3_AAA_Filters 01 02 03_BCG 2_ShortDashed_Thickness 1_Lines.geojson
+ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_Group 3_AAA_Filters 01 02 03_BCG 2_Style ShortDashed_Thick 1_Lines.geojson
 {
   "type": "FeatureCollection",
   "features": [
@@ -148,14 +148,14 @@ ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 3_AAA_Filters 01 02 03_BC
       },
       "properties": {
         "E2G_MapObjectType": "ApproachControl",
-        "E2G_MapGroupId": "3",
+        "E2G_Group": "3",
         "E2G_LineObjectId": "AAA"
       }
     }
   ]
 }
 
-ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01_BCG 14_VOR_FontSize 2_Symbols.geojson
+ERAM_2_GEOJSON\SYMS_TEST-B\VOR_Group 23_Filters 01_BCG 14_VOR_Font 2_Symbols.geojson
 {
   "type": "FeatureCollection",
   "features": [
@@ -170,7 +170,7 @@ ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01_BCG 14_VOR_FontSize 2_Sy
       },
       "properties": {
         "E2G_MapObjectType": "VOR",
-        "E2G_MapGroupId": "23",
+        "E2G_Group": "23",
         "E2G_SymbolId": "ACY"
       }
     },
@@ -185,14 +185,14 @@ ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01_BCG 14_VOR_FontSize 2_Sy
       },
       "properties": {
         "E2G_MapObjectType": "VOR",
-        "E2G_MapGroupId": "23",
+        "E2G_Group": "23",
         "E2G_SymbolId": "DOBIE"
       }
     }
   ]
 }
 
-ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01 02 03_BCG 14_VOR_FontSize 2_Symbols.geojson
+ERAM_2_GEOJSON\SYMS_TEST-B\VOR_Group 23_Filters 01 02 03_BCG 14_VOR_Font 2_Symbols.geojson
 {
   "type": "FeatureCollection",
   "features": [
@@ -207,14 +207,14 @@ ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01 02 03_BCG 14_VOR_FontSiz
       },
       "properties": {
         "E2G_MapObjectType": "VOR",
-        "E2G_MapGroupId": "23",
+        "E2G_Group": "23",
         "E2G_SymbolId": "ZZV"
       }
     }
   ]
 }
 
-ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01_BCG 15_FontSize 1_Underline F_XPixelOffset 0_YPixelOffset -12_Text.geojson
+ERAM_2_GEOJSON\SYMS_TEST-B\VOR_Group 23_Filters 01_BCG 15_Font 1_Underline F_X 0_Y -12_Text.geojson
 {
   "type": "FeatureCollection",
   "features": [
@@ -229,7 +229,7 @@ ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01_BCG 15_FontSize 1_Underl
       },
       "properties": {
         "E2G_MapObjectType": "VOR",
-        "E2G_MapGroupId": "23",
+        "E2G_Group": "23",
         "E2G_SymbolId": "DOBIE",
         "text": [
           "DOBIE"
