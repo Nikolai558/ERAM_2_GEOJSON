@@ -1,0 +1,240 @@
+ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 1_AAA_Filters 01_BCG 2_ShortDashed_Thickness 1_Lines.geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -93.60651666666666,
+              39.73322777777778
+            ],
+            [
+              -85.72065277777779,
+              39.57152777777778
+            ],
+            [
+              -85.97923888888889,
+              35.779380555555555
+            ]
+          ],
+          [
+            [
+              -96.69189722222222,
+              37.27783611111111
+            ],
+            [
+              -82.29950833333334,
+              39.27753888888889
+            ],
+            [
+              -91.16875555555556,
+              37.57871111111111
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "ApproachControl",
+        "E2G_MapGroupId": "1",
+        "E2G_LineObjectId": "AAA"
+      }
+    }
+  ]
+}
+
+ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 2_AAA_Filters 01_BCG 2_ShortDashed_Thickness 1_Lines.geojson
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -91.69189722222222,
+              35.27783611111111
+            ],
+            [
+              -93.29950833333334,
+              40.27753888888889
+            ],
+            [
+              -91.16875555555556,
+              37.57871111111111
+            ]
+          ],
+          [
+            [
+              -92.14323611111112,
+              36.038425
+            ],
+            [
+              -98.14038611111111,
+              35.834919444444445
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "ApproachControl",
+        "E2G_MapGroupId": "2",
+        "E2G_LineObjectId": "AAA"
+      }
+    }
+  ]
+}
+
+ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 3_AAA_Filters 13_BCG 2_ShortDashed_Thickness 1_Lines.geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -71.69189722222222,
+              25.27783611111111
+            ],
+            [
+              -93.29950833333334,
+              40.27753888888889
+            ]
+          ],
+          [
+            [
+              -73.29950833333334,
+              20.277538888888888
+            ],
+            [
+              -91.16875555555556,
+              37.57871111111111
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "ApproachControl",
+        "E2G_MapGroupId": "3",
+        "E2G_LineObjectId": "AAA"
+      }
+    }
+  ]
+}
+
+ERAM_2_GEOJSON\LINES_TEST-A\ApproachControl_MapGroupId 3_AAA_Filters 01 02 03_BCG 2_ShortDashed_Thickness 1_Lines.geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -72.14323611111111,
+            16.038425
+          ],
+          [
+            -98.14038611111111,
+            35.83491944444444
+          ]
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "ApproachControl",
+        "E2G_MapGroupId": "3",
+        "E2G_LineObjectId": "AAA"
+      }
+    }
+  ]
+}
+
+ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01_BCG 14_VOR_FontSize 2_Symbols.geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.57631388888889,
+          39.455875000000006
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "VOR",
+        "E2G_MapGroupId": "23",
+        "E2G_SymbolId": "ACY"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.04580555555556,
+          42.4282
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "VOR",
+        "E2G_MapGroupId": "23",
+        "E2G_SymbolId": "DOBIE"
+      }
+    }
+  ]
+}
+
+ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01 02 03_BCG 14_VOR_FontSize 2_Symbols.geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.89260277777778,
+          39.94085833333333
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "VOR",
+        "E2G_MapGroupId": "23",
+        "E2G_SymbolId": "ZZV"
+      }
+    }
+  ]
+}
+
+ERAM_2_GEOJSON\SYMS_TEST-B\VOR_MapGroupId 23_Filters 01_BCG 15_FontSize 1_Underline F_XPixelOffset 0_YPixelOffset -12_Text.geojson
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.04580555555556,
+          42.4282
+        ]
+      },
+      "properties": {
+        "E2G_MapObjectType": "VOR",
+        "E2G_MapGroupId": "23",
+        "E2G_SymbolId": "DOBIE",
+        "text": [
+          "DOBIE"
+        ]
+      }
+    }
+  ]
+}

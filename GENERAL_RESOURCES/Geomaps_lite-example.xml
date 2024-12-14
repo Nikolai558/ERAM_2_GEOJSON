@@ -271,7 +271,7 @@
 				<Underline>false</Underline>
 				<DisplaySetting>true</DisplaySetting>
 				<XPixelOffset>0</XPixelOffset>
-				<YPixelOffset>0</YPixelOffset>
+				<YPixelOffset>-12</YPixelOffset>
 				<GeoTextFilters>
 					<FilterGroup>1</FilterGroup>
 				</GeoTextFilters>
