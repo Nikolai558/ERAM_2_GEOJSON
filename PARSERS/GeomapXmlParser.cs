@@ -30,16 +30,25 @@ namespace ERAM_2_GEOJSON.Parsers
                 {
                     var geoMapObjectType = new GeoMapObjectType
                     {
+
+                        // Get GeoMapObjectType attributes
                         MapObjectType = geoMapObjectTypeNode["MapObjectType"]?.InnerText ?? throw new Exception("MapObjectType is required."),
                         MapGroupId = geoMapObjectTypeNode["MapGroupId"]?.InnerText ?? throw new Exception("MapGroupId is required."),
+
+                        // Get Line attributes
                         DefaultLineFilters = ParseFilterGroups(geoMapObjectTypeNode.SelectSingleNode("DefaultLineProperties/GeoLineFilters")),
-                        DefaultSymbolFilters = ParseFilterGroups(geoMapObjectTypeNode.SelectSingleNode("DefaultSymbolProperties/GeoSymbolFilters")),
-                        DefaultTextFilters = ParseFilterGroups(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/GeoTextFilters")),
                         DefaultLineStyle = ParseString(geoMapObjectTypeNode.SelectSingleNode("DefaultLineProperties/LineStyle")),
                         DefaultLineBcgGroup = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("DefaultLineProperties/BCGGroup")),
                         DefaultLineThickness = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("DefaultLineProperties/Thickness")),
+
+                        // Get Symbol attributes
+                        DefaultSymbolFilters = ParseFilterGroups(geoMapObjectTypeNode.SelectSingleNode("DefaultSymbolProperties/GeoSymbolFilters")),
+                        DefaultSymbolStyle = ParseString(geoMapObjectTypeNode.SelectSingleNode("DefaultSymbolProperties/SymbolStyle")),
                         DefaultSymbolBcgGroup = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("DefaultSymbolProperties/BCGGroup")),
                         DefaultSymbolFontSize = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("DefaultSymbolProperties/FontSize")),
+
+                        // Get Text attributes
+                        DefaultTextFilters = ParseFilterGroups(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/GeoTextFilters")),
                         DefaultTextBcgGroup = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/BCGGroup")),
                         DefaultTextFontSize = ParseInteger(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/FontSize")),
                         DefaultTextUnderline = ParseBoolean(geoMapObjectTypeNode.SelectSingleNode("TextDefaultProperties/Underline")),
@@ -87,8 +96,6 @@ namespace ERAM_2_GEOJSON.Parsers
                             OverridingSymbolFiltersGroups = ParseFilterGroups(geoMapSymbolNode.SelectSingleNode("GeoSymbolFilters")),
                             OverridingSymbolBcgGroup = ParseInteger(geoMapSymbolNode.SelectSingleNode("BCGGroup")),
                             OverridingSymbolFontSize = ParseInteger(geoMapSymbolNode.SelectSingleNode("FontSize")),
-
-                            // Add OverridingSymbolStyle logic
                             OverridingSymbolStyle = geoMapSymbolNode["SymbolStyle"]?.InnerText
                         };
 
@@ -97,6 +104,7 @@ namespace ERAM_2_GEOJSON.Parsers
                             ? geoMapSymbol.OverridingSymbolFiltersGroups
                             : geoMapObjectType.DefaultSymbolFilters;
 
+                        geoMapSymbol.AppliedSymbolStyle = geoMapSymbol.OverridingSymbolStyle ?? geoMapObjectType.DefaultSymbolStyle;
                         geoMapSymbol.AppliedSymbolBcgGroup = geoMapSymbol.OverridingSymbolBcgGroup ?? geoMapObjectType.DefaultSymbolBcgGroup;
                         geoMapSymbol.AppliedSymbolFontSize = geoMapSymbol.OverridingSymbolFontSize ?? geoMapObjectType.DefaultSymbolFontSize;
 

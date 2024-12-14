@@ -25,8 +25,8 @@ namespace ERAM_2_GEOJSON
                 {
                     @"C:\Users\ksand\source\repos\ERAM_2_GEOJSON\GENERAL_RESOURCES\",
                     @"C:\Users\ksand\downloads\",
-                    "attributes",
-                    "true"
+                    "raw",
+                    "false"
                 };
 
                 // geomapXmlFileName = "Geomaps_lite-example.xml";
@@ -38,7 +38,7 @@ namespace ERAM_2_GEOJSON
             if (args.Length != 4)
             {
                 Console.WriteLine(@"ERROR: Expected args to be passed as follows:");
-                Console.WriteLine(@"     sourceFileDirectory userSelectedOutputDirectory outputFiltersOrAttributes includeCustomProperties(true/false)");
+                Console.WriteLine(@"     sourceFileDirectory userSelectedOutputDirectory outputByFormat includeCustomProperties(true/false)");
                 Console.WriteLine(@"Note: Wrap paths with spaces in double quotes; For example:");
                 Console.WriteLine(@"       ""C:\Users\username has a space in it\desktop\geomaps"" ""C:\Users\username\desktop\Project Folder"" attributes true");
                 return;
@@ -49,7 +49,7 @@ namespace ERAM_2_GEOJSON
                 // Set args to variables
                 string sourceFileDirectory = args[0];
                 string userSelectedOutputDirectory = args[1];
-                string outputFiltersOrAttributes = args[2];
+                string outputByFormat = args[2];
                 bool includeCustomProperties = bool.Parse(args[3]); // Converted to a boolean
 
                 // Create file path variables using userSelectedOutputDirectory and the file name variables
@@ -80,22 +80,28 @@ namespace ERAM_2_GEOJSON
                 string outputDirectory = Path.Combine(userSelectedOutputDirectory, "ERAM_2_GEOJSON_OUTPUT");
                 DirectoryHandler.CreateOutputDirectory(outputDirectory);
 
-                if (outputFiltersOrAttributes == "filters")
+                if (outputByFormat == "filters")
                 {
                     // Generate GeoJSON by Filters
                     GeoJsonGeneratorByFilters generator = new GeoJsonGeneratorByFilters();
                     generator.GenerateGeoJson(geoMapRecords, outputDirectory, includeCustomProperties);
                 }
-                else if (outputFiltersOrAttributes == "attributes")
+                else if (outputByFormat == "attributes")
                 {
                     // Generate GeoJSON by Attributes
                     GeoJsonGeneratorByAttributes generator = new GeoJsonGeneratorByAttributes();
                     generator.GenerateGeoJson(geoMapRecords, outputDirectory, includeCustomProperties);
                 }
+                else if (outputByFormat == "raw")
+                {
+                    // Generate GeoJSON by Attributes
+                    GeoJsonGeneratorByRaw generator = new GeoJsonGeneratorByRaw();
+                    generator.GenerateGeoJson(geoMapRecords, outputDirectory, includeCustomProperties);
+                }
                 else
                 {
                     Console.WriteLine(@"ERROR: Expected args to be passed as follows:");
-                    Console.WriteLine(@"     sourceFileDirectory userSelectedOutputDirectory outputFiltersOrAttributes includeCustomProperties(true/false)");
+                    Console.WriteLine(@"     sourceFileDirectory userSelectedOutputDirectory outputByFormat includeCustomProperties(true/false)");
                     Console.WriteLine(@"Note: Wrap paths with spaces in double quotes; For example:");
                     Console.WriteLine(@"       ""C:\Users\username has a space in it\desktop\geomaps"" ""C:\Users\username\desktop\Project Folder"" attributes true");
                     Console.WriteLine();

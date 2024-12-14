@@ -504,4 +504,70 @@ Examples:
 	 - SECTOR_MapGroupId 3_Filters 20_BCG 19_DME_FontSize 2_Symbols.geojson
 	 - WAYPOINT_MapGroupId 30_Filters 04 05_BCG 15_FontSize 1_Underline T_XPixelOffset 0_YPixelOffset -12_Text.geojson
 
-File names will need to go through the SanitizeForFileName method prior to creation.
+File names will need to go through th
+
+# PHASE 3 "Raw"
+---
+
+## INTENT
+Now that By Filter and By Attribute options are complete, the next option will be "RAW". This option allows the user to select that the output files will be a direct conversion from the XML objects. All objects within the xml will be output to a GeomapId .geojson file with its own feature and all the attributes associated with that object in the properties section of the feature. No EFFICIENT LINESTRING HANDLING or anything like that will take place; This is a raw conversion of the xml to .geojson as much as possible.
+
+## GEOJSONGENERATOR
+A new geojsongenerator will be created (GeoJsonGeneratorByRaw) for this new feature.
+
+## DIRECTORY NAMING
+
+This By Raw option will created directories the same way as the By Filters option: ERAM_2_GEOJSON_OUTPUT\`GeomapId`_`LabelLine1`-`LabelLine2`
+Except now there will be no sub directories within the GeomapId folder.
+
+## FILE NAMES
+
+Files will now be named like so "<GeomapId> Record.geojson" and placed into the coorisponding GeomapId directory.
+
+Example:
+
+...\ERAM_2_GEOJSON_OUTPUT\LNSS_TEST-A\LNSS.geojson (Contains all data for the LNSS GeomapId)
+
+...\ERAM_2_GEOJSON_OUTPUT\SYMS_TEST-B\SYMS.geojson (Contains all data for the SYMS GeomapId)
+
+## FEATURE PROPERTIES
+Note: In the properties section with this Raw option, the filters must not be prefixed with a leading 0 here if they are single digits and, booleans should spell out true/false instead of just T/F.
+
+ - If Line:
+   - Regardless if "includeCustomProperties==true/false":
+     - "style", "line.AppliedLineStyle"
+     - "thickness", line.AppliedLineThickness
+     - "bcg", line.AppliedLineBcgGroup
+     - "filters", [line.AppliedLineFilters]
+   - If "includeCustomProperties==true", also include:
+     - "E2G_MapObjectType", objectType.MapObjectType"
+     - "E2G_MapGroupId", "objectType.MapGroupId"
+     - "E2G_LineObjectId", "line.LineObjectId"
+   - Example:
+     - "properties": {"style": "shortDashed","thickness": 3,"bcg": 1,"filters": [1, 8]}
+- If Symbol:
+   - Regardless if "includeCustomProperties==true/false":
+     - "bcg", symbol.AppliedSymbolBcgGroup
+     - "filters", [symbol.AppliedSymbolFilters]
+     - "style", "symbol.AppliedSymbolStyle"
+     - "size", symbol.AppliedSymbolFontSize
+   - Example:
+     - "properties":{"bcg":13,"filters":[13],"style":"airwayIntersections","size":1}
+   - If "includeCustomProperties==true", also include:
+     - "E2G_MapObjectType", objectType.MapObjectType
+     - "E2G_MapGroupId", objectType.MapGroupId
+     - "E2G_SymbolId", symbol.SymbolId
+- If Text:
+   - Regardless if "includeCustomProperties==true/false": 
+     - "bcg", textObject.AppliedTextBcgGroup
+     - "filters", [textObject.AppliedTextFilters]
+     - "size", textObject.AppliedTextFontSize
+     - "underline", textObject.AppliedTextUnderline
+     - "xOffset", textObject.AppliedTextXPixelOffset
+     - "yOffset", textObject.AppliedTextYPixelOffset
+   - Example:
+     - "properties":{"bcg":3,"filters":[3],"size":1,"underline":false,"xOffset":-12,"yOffset":0}
+   - If "includeCustomProperties==true", also include:
+    - "E2G_MapObjectType", objectType.MapObjectType
+    - "E2G_MapGroupId", objectType.MapGroupId
+    - "E2G_SymbolId", symbol.SymbolId
