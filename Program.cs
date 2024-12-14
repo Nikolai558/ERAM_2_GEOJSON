@@ -26,7 +26,7 @@ namespace ERAM_2_GEOJSON
                     @"C:\Users\ksand\source\repos\ERAM_2_GEOJSON\GENERAL_RESOURCES\",
                     @"C:\Users\ksand\downloads\",
                     "raw",
-                    "false"
+                    "true"
                 };
 
                 // geomapXmlFileName = "Geomaps_lite-example.xml";
