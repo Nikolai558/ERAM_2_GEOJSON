@@ -15,7 +15,7 @@ namespace ERAM_2_GEOJSON
     class Program
     {
         // TODO: Update version number
-        private const string CurrentVersion = "1.0.0rc1";
+        private const string CurrentVersion = "1.0.0rc2";
         static void Main()
         {
             // TODO: Check testing status before release.
