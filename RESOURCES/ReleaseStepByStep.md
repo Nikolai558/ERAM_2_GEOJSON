@@ -23,6 +23,7 @@
    - **Deployment Mode**: Select **Self-contained**.
    - **Target Runtime**: `win-x64`.
    - **Produce Single File**: Ensure this is checked.
+   - **Trim unused code**: Ensure this is _**NOT**_ checked.
 
 4. Publish:
    - Click **Finish**, then **Publish**.

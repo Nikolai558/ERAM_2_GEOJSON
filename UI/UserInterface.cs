@@ -31,7 +31,7 @@ namespace ERAM_2_GEOJSON.UI
             // Step 2: Output Directory Input
             Console.Clear();
             Console.WriteLine("OUTPUT DIRECTORY\n");
-            Console.WriteLine("Copy and Paste the path to the directory where you wish to have the E2G_OUTPUT folder created and files output to.");
+            Console.WriteLine("Copy and Paste the path to the directory where you wish to have the E2G_OUTPUT folder created and files output to.\n");
             Console.WriteLine($"WARNING... If the E2G_OUTPUT folder already exists in the directory you provide, it will be deleted and remade for these new files.\n");
             string userSelectedOutputDirectory = PromptForUserSelectedOutputDirectory("Enter (copy/paste) the output directory where results will be saved:");
 
