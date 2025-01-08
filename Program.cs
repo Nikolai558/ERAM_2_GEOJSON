@@ -1,85 +1,90 @@
 ﻿using ERAM_2_GEOJSON.Helpers;
 using ERAM_2_GEOJSON.Models;
 using ERAM_2_GEOJSON.Parsers;
+using ERAM_2_GEOJSON.UI;
+using Helpers;
+using Models;
+using Parsers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace ERAM_2_GEOJSON
 {
     class Program
     {
-        static void Main(string[] args)
+        // TODO: Update version number
+        private const string CurrentVersion = "1.0.0rc1";
+        static void Main()
         {
-            // Declare file names
-            // string geomapXmlFileName = "Geomaps.xml";
-            string geomapXmlFileName = "Geomaps_lite-example.xml";
+            // TODO: Check testing status before release.
+            bool testing = false; // if testing=true, UI and versionCheck are disabled
 
-            // TODO: Write code that will parse this file and then un-comment out this line.
-            //string consoleCommandControlFileName = "ConsoleCommandControl.xml";
-
-            // TODO: Delete or comment-out prior to release
-            if (args.Length == 0) // Only override if no arguments are passed
+            // Set the title of the console window
+            if (testing)
             {
-                args = new string[]
-                {
-                    @"C:\Users\ksand\source\repos\ERAM_2_GEOJSON\GENERAL_RESOURCES\",
-                    @"C:\Users\ksand\downloads\",
-                    "filters",
-                    "true"
-                };
-
-                // geomapXmlFileName = "Geomaps_lite-example.xml";
-                // TODO: Write code that will parse this file and then un-comment out this line.
-                //consoleCommandControlFileName = "ConsoleCommandControl.xml";
+                Console.Title = $"E2G (testing)";
+            }
+            else
+            {
+                Console.Title = $"E2G (v{CurrentVersion})";
             }
 
-            // Validate the number of arguments
-            if (args.Length != 4)
+            // Declare file names and variables
+            string geomapXmlFileName = "Geomaps.xml"; // Required file containing all geomaps.
+            string consoleCommandControlFileName = "ConsoleCommandControl.xml"; // Optional file containing menu labels.
+            string sourceFileDirectory; // user selected directory to find required files.
+            string userSelectedOutputDirectory; // user selected directory for output. Code will append "\E2G" as needed.
+            string outputByFormat; // user selected output format of the geojsons (filter/attributes/raw).
+            bool includeCustomProperties; // determines if the geojson features will include organizing/debugging properties.
+
+            // Assign variables based on testing status
+            if (testing)
             {
-                Console.WriteLine(@"ERROR: Expected args to be passed as follows:");
-                Console.WriteLine(@"     sourceFileDirectory userSelectedOutputDirectory outputByFormat includeCustomProperties(true/false)");
-                Console.WriteLine(@"Note: Wrap paths with spaces in double quotes; For example:");
-                Console.WriteLine(@"       ""C:\Users\username has a space in it\desktop\geomaps"" ""C:\Users\username\desktop\Project Folder"" attributes true");
+                // Assign variables
+                sourceFileDirectory = @"C:\Users\ksand\OneDrive\Desktop\ProjFolder\c427ac12_ZOB_121224_103124_T\";
+                userSelectedOutputDirectory = @"C:\Users\ksand\downloads\";
+                outputByFormat = "raw";
+                includeCustomProperties = false;
+            }
+            else
+            {
+                // TODO: Uncomment and test once GitHub is back online.
+                // Check for new version. Not available if testing=true
+                Console.WriteLine("Checking for updates...\n\n");
+                VersionCheck versionCheck = new VersionCheck(CurrentVersion);
+                versionCheck.CheckForUpdates();
+                Console.Clear();
+
+                // Launch UI to assign variables
+                (sourceFileDirectory, userSelectedOutputDirectory, outputByFormat, includeCustomProperties) = UserInterface.Start(geomapXmlFileName, consoleCommandControlFileName);
+            }
+
+            // Create file path variables using userSelectedOutputDirectory and the file name variables.
+            string geomapXmlFilePath = Path.Combine(sourceFileDirectory, geomapXmlFileName);
+            string consoleCommandControlXmlFilePath = Path.Combine(sourceFileDirectory, consoleCommandControlFileName);
+
+            // Ensure the source Geomap.xml file exists in chosen directory
+            if (!File.Exists(geomapXmlFilePath))
+            {
+                Console.WriteLine($"\n\nError: Could not find '{geomapXmlFileName}' here:");
+                Console.WriteLine($"       '{userSelectedOutputDirectory}'\n\n");
                 return;
             }
 
             try
             {
-                // Set args to variables
-                string sourceFileDirectory = args[0];
-                string userSelectedOutputDirectory = args[1];
-                string outputByFormat = args[2];
-                bool includeCustomProperties = bool.Parse(args[3]); // Converted to a boolean
-
-                // Create file path variables using userSelectedOutputDirectory and the file name variables
-                string geomapXmlFilePath = Path.Combine(sourceFileDirectory, geomapXmlFileName);
-                // TODO: Write code that will parse this file and then un-comment out this line.
-                //string consoleCommandControlXmlFilePath = Path.Combine(sourceFileDirectory, consoleCommandControlFileName);
-
-                // Ensure the source Geomap.xml file exists
-                if (!File.Exists(geomapXmlFilePath))
-                {
-                    Console.WriteLine($"Error: Could not find '{geomapXmlFileName}' here:");
-                    Console.WriteLine($"       '{userSelectedOutputDirectory}'");
-                    return;
-                }
-
-                // Checks if the ConsoleCommandControl.xml file exists and prints a notificaiton message if not.
-                // TODO: Write code that will parse this file and then un-comment out this line.
-                //if (!File.Exists(consoleCommandControlXmlFilePath))
-                //{
-                //    Console.WriteLine($"Information: Could not find '{consoleCommandControlFileName}' here, but is not required:");
-                //    Console.WriteLine($"             '{userSelectedOutputDirectory}'");
-                //}
-
                 // Parse the geomapXML file into GeoMapRecords
-                List<GeoMapRecord> geoMapRecords = GeomapXmlParser.Parse(geomapXmlFilePath);
+                Console.Write($"Parsing '{geomapXmlFileName}'...");
+                var (geoMapRecords, bcgMenuToGeomapIds, filterMenuToGeomapIds) = GeomapXmlParser.Parse(geomapXmlFilePath);
+                Console.WriteLine(" Complete");
 
                 // Create the output directory
-                string outputDirectory = Path.Combine(userSelectedOutputDirectory, "ERAM_2_GEOJSON_OUTPUT");
+                string outputDirectory = Path.Combine(userSelectedOutputDirectory, "E2G_OUTPUT");
                 DirectoryHandler.CreateOutputDirectory(outputDirectory);
 
+                Console.Write($"\nCreating geojsons...");
                 if (outputByFormat == "filters")
                 {
                     // Generate GeoJSON by Filters
@@ -100,23 +105,56 @@ namespace ERAM_2_GEOJSON
                 }
                 else
                 {
-                    Console.WriteLine(@"ERROR: Expected args to be passed as follows:");
-                    Console.WriteLine(@"     sourceFileDirectory userSelectedOutputDirectory outputByFormat includeCustomProperties(true/false)");
-                    Console.WriteLine(@"Note: Wrap paths with spaces in double quotes; For example:");
-                    Console.WriteLine(@"       ""C:\Users\username has a space in it\desktop\geomaps"" ""C:\Users\username\desktop\Project Folder"" attributes true");
-                    Console.WriteLine();
+                    Console.WriteLine($"ERROR: outputByFormat set to '{outputByFormat}'");
                     return;
                 }
 
-                Console.WriteLine("GeoJSON generation complete.");
-                // TODO: Write code that will parse this file and then un-comment out this line.
-                //Console.WriteLine("ConsoleCommandControl generation complete.");
-                Console.WriteLine("Check the specified output directory for the results.");
+                // Console.WriteLine("\n\n\t\t\tGeojsons complete.");
+                Console.WriteLine(" Complete");
+
+                // Add isDefault features to ByFilters and ByAttributes .geojsons that were output.
+                if (!(outputByFormat == "raw"))
+                 {
+                     Console.Write($"\nAdding isDefaults to output files...");
+                     AddIsDefaults.AddToGeoJsonFiles(outputDirectory);
+                     // Console.WriteLine($"\n\n\t\t\tisDefaults added.");
+                     Console.WriteLine(" Complete");
+                }
+
+                // Process ConsoleCommandControl.xml if it exists
+                if (File.Exists(consoleCommandControlXmlFilePath))
+                {
+
+                    // Parse the ConsoleCommandControl.xml
+                    Console.Write($"\nParsing & creating '{consoleCommandControlFileName}'...");
+                    ConsoleCommandControl_Records consoleCommandControlRecords = ConsoleCommandControlXmlParser.Deserialize(consoleCommandControlXmlFilePath);
+
+                    // Generate ConsoleCommandControl.txt
+                    string consoleCommandControlOutputPath = Path.Combine(outputDirectory, "ConsoleCommandControl.txt");
+                    ConsoleCommandControlTxtGenerator.GenerateTxtFile(consoleCommandControlOutputPath, consoleCommandControlRecords, bcgMenuToGeomapIds, filterMenuToGeomapIds);
+
+                    //Console.WriteLine("\n\n\t\t\tConsoleCommandControl.txt Complete.");
+                    Console.WriteLine(" Complete");
+                }
+
+                // Process is done, prompt user to open the directory where files are stored.
+                Console.WriteLine("\n\nDONE!\n\n");
+                Console.WriteLine("         Your files have been saved here:");
+                Console.WriteLine($"         {outputDirectory}");
+                Console.WriteLine("\n\nPress any key to open that folder and exit this program...");
+                Console.ReadKey();
+
+                // Open a windows explorer window to the outputDirectory
+                if (System.IO.Directory.Exists(outputDirectory))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = outputDirectory,
+                        UseShellExecute = true
+                    });
+                }
             }
-            catch (FormatException)
-            {
-                Console.WriteLine("Error: The third argument (includeCustomProperties) must be 'true' or 'false'.");
-            }
+
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
