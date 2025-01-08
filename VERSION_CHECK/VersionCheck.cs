@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 public class VersionCheck
 {
-    private const string GitHubApiUrl = "https://api.github.com/repos/KCSanders7070/ERAM_2_GEOJSON/releases/latest";
+    private const string GitHubApiUrl = "https://api.github.com/repos/Nikolai558/ERAM_2_GEOJSON/releases/latest";
     private readonly string _currentVersion;
 
     public VersionCheck(string currentVersion)
@@ -60,7 +60,7 @@ public class VersionCheck
                             Console.WriteLine("Opening the download page...");
                             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                             {
-                                FileName = "https://github.com/KCSanders7070/ERAM_2_GEOJSON/blob/master/README.md",
+                                FileName = "https://github.com/Nikolai558/ERAM_2_GEOJSON/blob/master/README.md",
                                 UseShellExecute = true
                             });
 

@@ -17,7 +17,7 @@ namespace ERAM_2_GEOJSON.UI
             Console.WriteLine($"a comprehensive .txt file will be created from that data.\n\n");
             Console.WriteLine($"For additional details concerning how the geojson features are created");
             Console.WriteLine($"with the different output format options, reference the README.md file found here:\n");
-            Console.WriteLine($"https://github.com/KCSanders7070/ERAM_2_GEOJSON\n\n");
+            Console.WriteLine($"https://github.com/Nikolai558/ERAM_2_GEOJSON\n\n");
             Console.WriteLine($"Press any key to continue...");
             Console.ReadKey();
 

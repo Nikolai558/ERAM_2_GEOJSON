@@ -2,7 +2,7 @@
 
 Special Thanks to Kyle Sanders for creating this app! Hosting on my account in order to make the transition into FE-Buddy easier.
 
-## [DOWNLOAD](https://github.com/KCSanders7070/ERAM_2_GEOJSON/releases/latest/download/E2G.exe)
+## [DOWNLOAD](https://github.com/Nikolai558/ERAM_2_GEOJSON/releases/latest/download/E2G.exe)
 *Change Log located at the end of this document*
 
 ---
