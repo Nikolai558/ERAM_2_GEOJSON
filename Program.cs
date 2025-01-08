@@ -126,7 +126,7 @@ namespace ERAM_2_GEOJSON
                 {
 
                     // Parse the ConsoleCommandControl.xml
-                    Console.Write($"\nParsing & creating '{consoleCommandControlFileName}'...");
+                    Console.Write($"\nParsing & creating 'ConsoleCommandControl' data...");
                     ConsoleCommandControl_Records consoleCommandControlRecords = ConsoleCommandControlXmlParser.Deserialize(consoleCommandControlXmlFilePath);
 
                     // Generate ConsoleCommandControl.txt
