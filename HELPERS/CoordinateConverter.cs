@@ -4,8 +4,12 @@ namespace ERAM_2_GEOJSON.Helpers
 {
     public class CoordinateConverter
     {
+        /// <summary>
+        /// Converts DMS coordinates from the GeoMaps.xml into DEC format for GeoJson.
+        /// </summary>
         public static double ConvertDMSToDecimal(string dms)
         {
+            // Checks initial format by ensuring not empty and is long enough.
             if (string.IsNullOrEmpty(dms) || dms.Length < 7)
             {
                 throw new ArgumentException("Invalid DMS format. DMS should be at least 7 characters long.");

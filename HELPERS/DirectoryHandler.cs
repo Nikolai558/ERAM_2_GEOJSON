@@ -1,73 +1,75 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
+using ERAM_2_GEOJSON.Helpers;
 
 namespace ERAM_2_GEOJSON.Helpers
 {
+    /// <summary>
+    /// Provides utility methods to manage directories for the application.
+    /// </summary>
     public static class DirectoryHandler
     {
+        /// <summary>
+        /// Creates the output directory after deleting it if it already exists.
+        /// </summary>
+        /// <param name="outputDirectory">The path to the output directory.</param>
+        /// <exception cref="InvalidOperationException">Thrown when directory creation fails.</exception>
         public static void CreateOutputDirectory(string outputDirectory)
         {
             try
             {
-                // Check if the directory exists
+                // If the directory exists, delete it along with its contents
                 if (Directory.Exists(outputDirectory))
                 {
-                    // Delete the directory and all its contents
                     Directory.Delete(outputDirectory, true);
-                    Console.WriteLine($"Deleted existing directory: {outputDirectory}");
                 }
 
-                // Create the directory
+                // Create a new directory at the specified path
                 Directory.CreateDirectory(outputDirectory);
-                Console.WriteLine($"Created new directory: {outputDirectory}");
             }
             catch (Exception ex)
             {
-                // Log the error and throw a new exception to indicate failure
+                // Log the error and throw a more meaningful exception
                 Console.WriteLine($"An error occurred while managing the directory: {ex.Message}");
                 throw new InvalidOperationException($"Failed to create the output directory at: {outputDirectory}", ex);
             }
         }
 
+        /// <summary>
+        /// Creates a directory for a specific record using sanitized inputs.
+        /// </summary>
+        /// <param name="outputDirectory">The base output directory.</param>
+        /// <param name="recordId">The record identifier.</param>
+        /// <param name="labelLine1">The first label line for naming.</param>
+        /// <param name="labelLine2">The second label line for naming.</param>
+        /// <returns>The path to the created record directory.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when directory creation fails.</exception>
         public static string CreateRecordDirectory(string outputDirectory, string recordId, string labelLine1, string labelLine2)
         {
             try
             {
-                // Sanitize inputs of invalide characters
-                string sanitizedRecordId = SanitizeForFileName(recordId);
-                string sanitizedLabelLine1 = SanitizeForFileName(labelLine1);
-                string sanitizedLabelLine2 = SanitizeForFileName(labelLine2);
+                // Sanitize inputs to ensure safe file or directory names
+                string sanitizedRecordId = FileNameSanitizer.SanitizeForFileName(recordId);
+                string sanitizedLabelLine1 = FileNameSanitizer.SanitizeForFileName(labelLine1);
+                string sanitizedLabelLine2 = FileNameSanitizer.SanitizeForFileName(labelLine2);
 
-                // Construct the Record Directory path ex: "MAIN-ZOB_MAPS"
+                // Construct the directory path based on sanitized inputs
                 string recordDirectory = Path.Combine(outputDirectory, $"{sanitizedRecordId}-{sanitizedLabelLine1}_{sanitizedLabelLine2}");
 
-                // Check if the directory exists
+                // Create the directory if it does not already exist
                 if (!Directory.Exists(recordDirectory))
                 {
-                    // Create the directory
                     Directory.CreateDirectory(recordDirectory);
-                    Console.WriteLine($"Created record directory: {recordDirectory}");
                 }
 
-                return recordDirectory;
+                return recordDirectory; // Return the path to the created directory
             }
             catch (Exception ex)
             {
-                // Log the error and throw a new exception to indicate failure
+                // Log the error and throw a more meaningful exception
                 Console.WriteLine($"An error occurred while creating the record directory: {ex.Message}");
                 throw new InvalidOperationException($"Failed to create the record directory at: {outputDirectory}", ex);
             }
-        }
-
-        // Helper method to remove invalid characters from a string to make it safe for file or directory names
-        private static string SanitizeForFileName(string input)
-        {
-            // Get invalid characters for file and directory names
-            char[] invalidChars = Path.GetInvalidFileNameChars();
-
-            // Remove any invalid character from the input string
-            return new string(input.Where(ch => !invalidChars.Contains(ch)).ToArray());
         }
     }
 }

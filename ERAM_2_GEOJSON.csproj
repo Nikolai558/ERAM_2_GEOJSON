@@ -5,11 +5,18 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!-- <UseWindowsForms>true</UseWindowsForms> --><!-- allows use of windows folder browser but no longer using it because of issues it causes -->
+	<ApplicationIcon>RESOURCES\E2G_Icon.ico</ApplicationIcon><!-- location of the E2G Icon -->
+	<AssemblyName>E2G</AssemblyName><!-- name of the .exe when built -->
+	<PublishSingleFile>true</PublishSingleFile><!-- allows for a fully self-contained .exe to be created. Bundles everything into a single .exe -->
+    <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract><!-- allows for a fully self-contained .exe to be created. Ensures native libraries are directly included in the .exe instead of being extracted at runtime. -->
+    <SelfContained>true</SelfContained><!-- allows for a fully self-contained .exe to be created. Produces a self-contained build, bundling the .NET runtime. -->
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GeoJSON.Net" Version="1.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <Content Include="RESOURCES\E2G_Icon.ico" /><!-- ensures the build includes the icon -->
   </ItemGroup>
 
 </Project>
