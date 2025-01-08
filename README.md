@@ -19,6 +19,11 @@ ERAM_2_GEOJSON (E2G) converts Real World ERAM `Geomaps.xml` files into GeoJSON f
 
 ---
 
+## Antivirus Warning:
+This application is distributed as an .exe file, which might trigger antivirus warnings. Rest assured, it is safe to use. For transparency, you can review the [source code here](https://github.com/Nikolai558/ERAM_2_GEOJSON/). If flagged, you may need to manually allow the application in your antivirus settings.
+
+---
+
 ## Use
 1. Ensure the `Geomaps.xml` file in an unzipped folder/directory.
 2. If available, include the `ConsoleCommandControl.xml` file in the same directory.
@@ -194,10 +199,9 @@ Unless your facility can get updated GeoMap.xml data on a regular basis, it is r
 
 ## CHANGE LOG
 
-### v1.0.0rc1 (05JAN2025)
-- Testing versioncheck
-
-- Implemented
+### v1.0.0 (08JAN2025)
+- Intial Release
+- Implemented Version Checks and Error Handling
 
 ### v0.1.3 (05JAN2025)
 
