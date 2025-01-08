@@ -84,7 +84,15 @@ public class VersionCheck
         }
         catch (HttpRequestException httpEx)
         {
-            Console.WriteLine("Network error: Unable to connect to the server. Please check your internet connection.");
+            if (httpEx.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                Console.WriteLine("Page Not Found error: Unable to connect to the Github Repository. This could be due to a Github Server Error.");
+            }
+            else
+            {
+                Console.WriteLine("Network error: Unable to connect to the Github server.");
+            }
+
             Console.WriteLine($"Details: {httpEx.Message}");
             PromptToContinue();
         }
@@ -96,7 +104,15 @@ public class VersionCheck
         }
         catch (Exception ex)
         {
-            Console.WriteLine("An unexpected error occurred.");
+            if (ex.InnerException != null && ex.InnerException.Message.Contains("No such host is known"))
+            {
+                Console.WriteLine("Network error: Unable to connect to the server. Please check your internet connection.");
+            }
+            else
+            {
+                Console.WriteLine("An unexpected error occurred.");
+            }
+
             Console.WriteLine($"Details: {ex.Message}");
             PromptToContinue();
         }
