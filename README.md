@@ -32,9 +32,9 @@ This application is distributed as an .exe file, which might trigger antivirus w
 ---
 
 ## Output Directory & Naming Format
-The tool creates an `E2G_OUTPUT` folder in the selected output directory. If output by Filters or Attributes, a subfolder named `<GeomapId>_<LabelLine1>_<LabelLine2>` is created for each `GeomapId` in `Geomaps.xml`. Ex: `CENTER_CENTER-MAP`
+The tool creates an `E2G_OUTPUT` folder in the selected output directory. If output by Filters or Attributes, a subfolder named `<GeomapId>_<LabelLine1>-<LabelLine2>` is created for each `GeomapId` in `Geomaps.xml`. Ex: `CENTER_CENTER-MAP`
 
-For Raw output, the `<GeomapId>_<LabelLine1>_<LabelLine2>` is included in the file name instead of a subdirectory.
+For Raw output, the `<GeomapId>_<LabelLine1>-<LabelLine2>` is included in the file name instead of a subdirectory.
 
 ### Output Formats
 1. **By Filters**: Groups GeoJSON files by shared Filter Group assignments.
@@ -189,11 +189,30 @@ Unless your facility can get updated GeoMap.xml data on a regular basis, it is r
    - Rename each file to reflect its contents, incorporating any naming conventions used by your facility.
 
 3. **Validate the New GeoMap**  
-   - Compare the new GeoMap you’ve constructed with the Raw GeoMap.  
+   - Compare the new GeoMap youâ€™ve constructed with the Raw GeoMap.  
    - Ensure that the new GeoMap matches the Raw GeoMap as closely as desired.  
 
 4. **Maintain and Manipulate the Data**  
    Once the new GeoMap is finalized, it is recommended to manipulate and maintain this data.
+
+---
+
+## Licence
+
+ERAM_2_GEOJSON  Copyright (C) 2025 Kyle Sanders, Nikolas Boling
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ---
 
